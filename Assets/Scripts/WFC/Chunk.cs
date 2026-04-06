@@ -16,12 +16,16 @@
 
             for (int i = 0; i < slots.Length; i++)
             {
-                slots[i] = new Slot(GetX(i), GetY(i));
+                slots[i] = new Slot(this, GetX(i), GetY(i));
             }
         }
 
         public Slot GetSlot(int x, int y)
         {
+            if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE)
+            {
+                return null;
+            }
             return slots[y * CHUNK_SIZE + x];
         }
 

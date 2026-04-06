@@ -1,21 +1,23 @@
-﻿namespace WFC
+﻿using UnityEngine.Assertions;
+
+namespace WFC
 {
     public class Module
     {
+        public int id;
+
         // Whether each of the four edges is solid
         public readonly bool[] edges;
 
-        // Symmetry?
-
         //public GameObject prefab;
+        public float angle;
 
-        public Module(bool north, bool east, bool south, bool west)
+        public Module(int id, bool[] edges, float angle)
         {
-            edges = new bool[4];
-            edges[0] = north;
-            edges[1] = east;
-            edges[2] = south;
-            edges[3] = west;
+            Assert.AreEqual(Direction.COUNT, edges.Length);
+            this.id = id;
+            this.edges = edges;
+            this.angle = angle;
         }
     }
 }

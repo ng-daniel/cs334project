@@ -2,24 +2,39 @@
 {
     public class Slot
     {
+        public readonly Chunk chunk;
         public readonly int x;
         public readonly int y;
 
         // Whether each module is in this slot's superposition
         public readonly bool[] wave;
 
+        // For each module, for each direction, returns an integer
+        // if any direction is 0, that module cannot go in that slot
+        // number of modules that could be in that direction from that module?
+        public readonly int[][] compatibility;
+
         public int possibleModuleCount;
         public Module module;
 
-        public Slot(int x, int y)
+        public Slot(Chunk chunk, int x, int y)
         {
+            this.chunk = chunk;
             this.x = x;
             this.y = y;
 
             wave = new bool[WFC.instance.ModuleCount()];
-            for (int m = 0; m < wave.Length; m++)
+            compatibility = new int[WFC.instance.ModuleCount()][];
+
+            for (int m = 0; m < WFC.instance.ModuleCount(); m++)
             {
                 wave[m] = true;
+                compatibility[m] = new int[Direction.COUNT];
+
+                for (int d = 0; d < Direction.COUNT; d++)
+                {
+                    compatibility[m][d] = WFC.instance.adjacencies[Direction.Opposite(d)][m].Count;
+                }
             }
 
             possibleModuleCount = wave.Length;
@@ -30,6 +45,16 @@
         {
             wave[m] = false;
             possibleModuleCount--;
+
+            for (int d = 0; d < Direction.COUNT; d++)
+            {
+                compatibility[m][d] = 0;
+            }
+        }
+
+        public Slot Neighbor(int d)
+        {
+            return chunk.GetSlot(x + Direction.OffsetX(d), y + Direction.OffsetY(d));
         }
     }
 }
