@@ -39,7 +39,7 @@ namespace WFC
 
         public List<Module> modules;
 
-        // For each direction, for each module, the list of modules that
+        // For each module, for each direction, the list of modules that
         // can be in that direction from that module
         // (called "propagator" in reference code)
         public List<int>[][] adjacencies;
@@ -61,7 +61,8 @@ namespace WFC
             BuildAdjacencies();
 
             Chunk chunk = new Chunk(0, 0);
-            Generate(chunk);
+            bool success = Generate(chunk);
+            Debug.Log(success);
         }
 
         private void AddModule(int bitmap, int symmetry)
@@ -73,16 +74,16 @@ namespace WFC
                 bitmap >>= 1;
             }
 
-            for (float angle = 0; angle < symmetry; angle += 90)
+            for (int angle = 0; angle < symmetry; angle += 90)
             {
                 modules.Add(new Module(modules.Count, edges, angle));
 
-                bool temp = edges[0];
-                for (int i = 0; i < edges.Length - 1; i++)
+                bool temp = edges[^1];
+                for (int i = edges.Length - 1; i > 0; i--)
                 {
-                    edges[i] = edges[i + 1];
+                    edges[i] = edges[i - 1];
                 }
-                edges[^1] = temp;
+                edges[0] = temp;
             }
         }
 
@@ -93,19 +94,19 @@ namespace WFC
 
         public void BuildAdjacencies()
         {
-            adjacencies = new List<int>[Direction.COUNT][];
-            for (int d = 0; d < Direction.COUNT; d++)
+            adjacencies = new List<int>[ModuleCount()][];
+            for (int m = 0; m < ModuleCount(); m++)
             {
-                adjacencies[d] = new List<int>[ModuleCount()];
-                for (int m = 0; m < ModuleCount(); m++)
+                adjacencies[m] = new List<int>[Direction.COUNT];
+                for (int d = 0; d < Direction.COUNT; d++)
                 {
-                    adjacencies[d][m] = new List<int>();
+                    adjacencies[m][d] = new List<int>();
                     for (int m2 = 0; m2 < ModuleCount(); m2++)
                     {
                         // If you have module m, then go in direction d, can module m2 be there?
                         if (modules[m].edges[d] == modules[m2].edges[Direction.Opposite(d)])
                         {
-                            adjacencies[d][m].Add(m2);
+                            adjacencies[m][d].Add(m2);
                         }
                     }
                 }
@@ -195,7 +196,7 @@ namespace WFC
 
             for (int m = 0; m < slot.wave.Length; m++)
             {
-                if (m != module)
+                if (slot.wave[m] != (m == module))
                 {
                     slot.Remove(m);
                     stack.Push((slot, m));
@@ -218,16 +219,20 @@ namespace WFC
                         continue;
                     }
 
-                    foreach (int m2 in adjacencies[d][m])
+                    foreach (int m2 in adjacencies[m][d])
                     {
-                        // If the neighbor slot has module m2, one of the modules
-                        // in adjacencies[o][m2] must be in the source slot.
-                        // One such case has been ruled out.
-                        neighbor.compatibility[m2][d]--;
+                        int o = Direction.Opposite(d);
 
-                        if (neighbor.compatibility[m2][d] == 0)
+                        // If the neighbor slot has module m2, one of the modules
+                        // in adjacencies[m2][opposite(d)] must be in the source slot.
+                        // One such case has been ruled out.
+                        neighbor.compatibility[m2][o]--;
+
+                        if (neighbor.compatibility[m2][o] == 0)
                         {
                             neighbor.Remove(m2);
+                            stack.Push((neighbor, m2));
+
                             if (neighbor.possibleModuleCount == 0)
                             {
                                 // No more possible modules, so generation failed
@@ -243,6 +248,12 @@ namespace WFC
 
         private void Spawn(Module module, Slot slot)
         {
+            if (module.id == 0)
+            {
+                // Empty module
+                return;
+            }
+
             int x = slot.chunk.chunkX * Chunk.CHUNK_SIZE + slot.x;
             int y = slot.chunk.chunkY * Chunk.CHUNK_SIZE + slot.y;
 

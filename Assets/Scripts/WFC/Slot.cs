@@ -9,9 +9,9 @@
         // Whether each module is in this slot's superposition
         public readonly bool[] wave;
 
-        // For each module, for each direction, returns an integer
-        // if any direction is 0, that module cannot go in that slot
-        // number of modules that could be in that direction from that module?
+        // For each module, for each direction, the number of modules
+        // that could be in that direction for that module
+        // If any direction is 0, the module cannot go in this slot
         public readonly int[][] compatibility;
 
         public int possibleModuleCount;
@@ -33,7 +33,7 @@
 
                 for (int d = 0; d < Direction.COUNT; d++)
                 {
-                    compatibility[m][d] = WFC.instance.adjacencies[Direction.Opposite(d)][m].Count;
+                    compatibility[m][d] = WFC.instance.adjacencies[m][d].Count;
                 }
             }
 

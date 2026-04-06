@@ -16,7 +16,7 @@ namespace WFC
         {
             Assert.AreEqual(Direction.COUNT, edges.Length);
             this.id = id;
-            this.edges = edges;
+            this.edges = (bool[])edges.Clone();
             this.angle = angle;
         }
     }
