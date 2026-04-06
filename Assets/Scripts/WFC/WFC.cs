@@ -32,11 +32,6 @@ namespace WFC
     {
         public static WFC instance;
 
-        public GameObject cube;
-
-        public float tileScale = 1;
-        public float tileHeight = 0.2f;
-
         public List<Module> modules;
 
         // For each module, for each direction, the list of modules that
@@ -51,21 +46,20 @@ namespace WFC
             instance = this;
 
             modules = new List<Module>();
-            AddModule(0b0000, 90);
-            AddModule(0b1000, 360);
-            AddModule(0b1100, 360);
-            AddModule(0b1010, 180);
-            AddModule(0b1110, 360);
-            AddModule(0b1111, 90);
+            AddModule(null, 0b0000, 90);
+            AddModule("Endpoint", 0b1000, 360);
+            AddModule("Corner", 0b1100, 360);
+            AddModule("Straight", 0b1010, 180);
+            AddModule("Junction", 0b1110, 360);
+            AddModule("Cross", 0b1111, 90);
 
             BuildAdjacencies();
 
             Chunk chunk = new Chunk(0, 0);
             bool success = Generate(chunk);
-            Debug.Log(success);
         }
 
-        private void AddModule(int bitmap, int symmetry)
+        private void AddModule(string name, int bitmap, int symmetry)
         {
             bool[] edges = new bool[Direction.COUNT];
             for (int i = 0; i < edges.Length; i++)
@@ -76,14 +70,14 @@ namespace WFC
 
             for (int angle = 0; angle < symmetry; angle += 90)
             {
-                modules.Add(new Module(modules.Count, edges, angle));
+                modules.Add(new Module(modules.Count, edges, name, angle));
 
-                bool temp = edges[^1];
-                for (int i = edges.Length - 1; i > 0; i--)
+                bool temp = edges[0];
+                for (int i = 0; i < edges.Length - 1; i++)
                 {
-                    edges[i] = edges[i - 1];
+                    edges[i] = edges[i + 1];
                 }
-                edges[0] = temp;
+                edges[^1] = temp;
             }
         }
 
@@ -143,7 +137,7 @@ namespace WFC
                     }
                 }
 
-                Spawn(slot.module, slot);
+                slot.Spawn();
             }
 
             return true;
@@ -244,23 +238,6 @@ namespace WFC
             }
 
             return true;
-        }
-
-        private void Spawn(Module module, Slot slot)
-        {
-            if (module.id == 0)
-            {
-                // Empty module
-                return;
-            }
-
-            int x = slot.chunk.chunkX * Chunk.CHUNK_SIZE + slot.x;
-            int y = slot.chunk.chunkY * Chunk.CHUNK_SIZE + slot.y;
-
-            GameObject go = Instantiate(cube);
-            go.transform.position = new Vector3(x * tileScale, 0, y * tileScale);
-            go.transform.rotation = Quaternion.Euler(0, module.angle, 0);
-            go.transform.localScale = new Vector3(tileScale, tileHeight, tileScale);
         }
     }
 }

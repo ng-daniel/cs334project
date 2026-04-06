@@ -9,14 +9,16 @@ namespace WFC
         // Whether each of the four edges is solid
         public readonly bool[] edges;
 
-        //public GameObject prefab;
+        public string prefabName;
         public float angle;
 
-        public Module(int id, bool[] edges, float angle)
+        public Module(int id, bool[] edges, string prefabName, float angle)
         {
             Assert.AreEqual(Direction.COUNT, edges.Length);
+
             this.id = id;
             this.edges = (bool[])edges.Clone();
+            this.prefabName = prefabName;
             this.angle = angle;
         }
     }

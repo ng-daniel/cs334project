@@ -1,7 +1,11 @@
-﻿namespace WFC
+﻿using UnityEngine;
+
+namespace WFC
 {
     public class Slot
     {
+        public const float SLOT_SIZE = 1;
+
         public readonly Chunk chunk;
         public readonly int x;
         public readonly int y;
@@ -55,6 +59,34 @@
         public Slot Neighbor(int d)
         {
             return chunk.GetSlot(x + Direction.OffsetX(d), y + Direction.OffsetY(d));
+        }
+
+        public Vector3 WorldPos()
+        {
+            int x = chunk.chunkX * Chunk.CHUNK_SIZE + this.x;
+            int y = chunk.chunkY * Chunk.CHUNK_SIZE + this.y;
+            return new Vector3(x * SLOT_SIZE, 0, y * SLOT_SIZE);
+        }
+
+        public void Spawn()
+        {
+            if (module.prefabName == null)
+            {
+                // Empty module
+                return;
+            }
+
+            if (y == 0)
+            {
+                Debug.Log($"({x}, {y}) = {module.id} {module.prefabName} @ {module.angle}");
+            }
+
+            GameObject prefab = WFC.instance.transform.Find(module.prefabName).gameObject;
+
+            GameObject go = Object.Instantiate(prefab);
+            go.transform.position = WorldPos();
+            go.transform.rotation = Quaternion.Euler(0, module.angle, 0);
+            go.SetActive(true);
         }
     }
 }
