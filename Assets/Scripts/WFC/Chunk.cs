@@ -81,13 +81,13 @@ namespace WFC
                     Slot neighbor = slot.Neighbor(d);
                     if (neighbor == null) continue;
 
-                    stack.Push((neighbor.x, neighbor.y));
+                    stack.Push((neighbor.slotX, neighbor.slotY));
                 }
             }
 
             foreach (Slot slot in slots)
             {
-                if (!reachable[slot.y * CHUNK_SIZE + slot.x])
+                if (!reachable[slot.slotY * CHUNK_SIZE + slot.slotX])
                 {
                     slot.module = WFCGenerator.instance.modules[0];
                 }

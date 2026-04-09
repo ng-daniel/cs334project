@@ -58,7 +58,7 @@ namespace WFC
 
             for (int angle = 0; angle < symmetry; angle += 90)
             {
-                modules.Add(new Module(modules.Count, edges, weight, name, angle));
+                modules.Add(new Module(modules.Count, name, edges, weight));
 
                 bool temp = edges[0];
                 for (int i = 0; i < edges.Length - 1; i++)

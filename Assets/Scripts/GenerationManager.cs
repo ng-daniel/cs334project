@@ -3,13 +3,17 @@ using WFC;
 
 public class GenerationManager : MonoBehaviour
 {
+    public static GenerationManager instance;
+
     public WFCGenerator wfc;
+    public GameObject cube;
 
     void Start()
     {
+        instance = this;
         wfc = new WFCGenerator();
 
-        wfc.AddModule(null, 0b0000, 90, 4f);
+        wfc.AddModule("Empty", 0b0000, 90, 4f);
         wfc.AddModule("Endpoint", 0b1000, 360, 0.1f);
         wfc.AddModule("Corner", 0b1100, 360, 1f);
         wfc.AddModule("Straight", 0b1010, 180, 5f);
