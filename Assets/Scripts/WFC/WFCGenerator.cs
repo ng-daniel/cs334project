@@ -47,7 +47,7 @@ namespace WFC
             modules = new List<Module>();
         }
 
-        public void AddModule(string name, int bitmap, int symmetry)
+        public void AddModule(string name, int bitmap, int symmetry, float weight)
         {
             bool[] edges = new bool[Direction.COUNT];
             for (int i = 0; i < edges.Length; i++)
@@ -58,7 +58,7 @@ namespace WFC
 
             for (int angle = 0; angle < symmetry; angle += 90)
             {
-                modules.Add(new Module(modules.Count, edges, name, angle));
+                modules.Add(new Module(modules.Count, edges, weight, name, angle));
 
                 bool temp = edges[0];
                 for (int i = 0; i < edges.Length - 1; i++)
@@ -158,14 +158,23 @@ namespace WFC
 
         public void Collapse(Slot slot)
         {
-            float rand = Random.value * slot.possibleModuleCount;
+            float sumWeights = 0f;
+            for (int i = 0; i < ModuleCount(); i++)
+            {
+                if (slot.wave[i])
+                {
+                    sumWeights += modules[i].weight;
+                }
+            }
+
+            float rand = Random.value * sumWeights;
             int module = -1;
 
             for (int m = 0; m < slot.wave.Length; m++)
             {
                 if (slot.wave[m])
                 {
-                    rand--;
+                    rand -= modules[m].weight;
                     if (rand <= 0)
                     {
                         module = m;
