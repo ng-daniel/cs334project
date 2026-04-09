@@ -1,4 +1,6 @@
-﻿namespace WFC
+﻿using System.Collections.Generic;
+
+namespace WFC
 {
     public class Chunk
     {
@@ -41,9 +43,54 @@
 
         public void PostGeneration()
         {
+            PruneUnreachablePaths();
+
             foreach (Slot slot in slots)
             {
                 slot.Spawn();
+            }
+        }
+
+        // Delete all paths that aren't reachable from the edge of a chunk
+        private void PruneUnreachablePaths()
+        {
+            bool[] reachable = new bool[slots.Length];
+            Stack<(int, int)> stack = new Stack<(int, int)>();
+
+            // Start with all chunk edges
+            for (int a = 0; a < CHUNK_SIZE; a++)
+            {
+                stack.Push((a, 0));
+                stack.Push((a, CHUNK_SIZE - 1));
+                stack.Push((0, a));
+                stack.Push((CHUNK_SIZE - 1, a));
+            }
+
+            while (stack.Count > 0)
+            {
+                (int x, int y) = stack.Pop();
+                if (reachable[y * CHUNK_SIZE + x]) continue;
+                reachable[y * CHUNK_SIZE + x] = true;
+
+                Slot slot = slots[y * CHUNK_SIZE + x];
+
+                for (int d = 0; d < Direction.COUNT; d++)
+                {
+                    if (!slot.module.edges[d]) continue;
+
+                    Slot neighbor = slot.Neighbor(d);
+                    if (neighbor == null) continue;
+
+                    stack.Push((neighbor.x, neighbor.y));
+                }
+            }
+
+            foreach (Slot slot in slots)
+            {
+                if (!reachable[slot.y * CHUNK_SIZE + slot.x])
+                {
+                    slot.module = WFCGenerator.instance.modules[0];
+                }
             }
         }
     }
