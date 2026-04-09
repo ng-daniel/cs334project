@@ -27,17 +27,17 @@ namespace WFC
             this.x = x;
             this.y = y;
 
-            wave = new bool[WFC.instance.ModuleCount()];
-            compatibility = new int[WFC.instance.ModuleCount()][];
+            wave = new bool[WFCGenerator.instance.ModuleCount()];
+            compatibility = new int[WFCGenerator.instance.ModuleCount()][];
 
-            for (int m = 0; m < WFC.instance.ModuleCount(); m++)
+            for (int m = 0; m < WFCGenerator.instance.ModuleCount(); m++)
             {
                 wave[m] = true;
                 compatibility[m] = new int[Direction.COUNT];
 
                 for (int d = 0; d < Direction.COUNT; d++)
                 {
-                    compatibility[m][d] = WFC.instance.adjacencies[m][d].Count;
+                    compatibility[m][d] = WFCGenerator.instance.adjacencies[m][d].Count;
                 }
             }
 
@@ -76,7 +76,8 @@ namespace WFC
                 return;
             }
 
-            GameObject prefab = WFC.instance.transform.Find(module.prefabName).gameObject;
+            GenerationManager manager = Object.FindAnyObjectByType<GenerationManager>();
+            GameObject prefab = manager.transform.Find(module.prefabName).gameObject;
 
             GameObject go = Object.Instantiate(prefab);
             go.transform.position = WorldPos();

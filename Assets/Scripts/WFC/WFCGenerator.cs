@@ -23,14 +23,13 @@
 // Provided image samples and tiles are not part of WaveFunctionCollapse software.
 
 using System.Collections.Generic;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace WFC
 {
-    public class WFC : MonoBehaviour
+    public class WFCGenerator
     {
-        public static WFC instance;
+        public static WFCGenerator instance;
 
         public List<Module> modules;
 
@@ -41,25 +40,14 @@ namespace WFC
 
         public Stack<(Slot, int)> stack;
 
-        void Start()
+        public WFCGenerator()
         {
             instance = this;
 
             modules = new List<Module>();
-            AddModule(null, 0b0000, 90);
-            AddModule("Endpoint", 0b1000, 360);
-            AddModule("Corner", 0b1100, 360);
-            AddModule("Straight", 0b1010, 180);
-            AddModule("Junction", 0b1110, 360);
-            AddModule("Cross", 0b1111, 90);
-
-            BuildAdjacencies();
-
-            Chunk chunk = new Chunk(0, 0);
-            Generate(chunk);
         }
 
-        private void AddModule(string name, int bitmap, int symmetry)
+        public void AddModule(string name, int bitmap, int symmetry)
         {
             bool[] edges = new bool[Direction.COUNT];
             for (int i = 0; i < edges.Length; i++)
@@ -136,8 +124,6 @@ namespace WFC
                         break;
                     }
                 }
-
-                slot.Spawn();
             }
 
             return true;

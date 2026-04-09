@@ -38,5 +38,13 @@
         {
             return slotIndex / CHUNK_SIZE;
         }
+
+        public void PostGeneration()
+        {
+            foreach (Slot slot in slots)
+            {
+                slot.Spawn();
+            }
+        }
     }
 }
