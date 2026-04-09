@@ -76,11 +76,6 @@ namespace WFC
                 return;
             }
 
-            if (y == 0)
-            {
-                Debug.Log($"({x}, {y}) = {module.id} {module.prefabName} @ {module.angle}");
-            }
-
             GameObject prefab = WFC.instance.transform.Find(module.prefabName).gameObject;
 
             GameObject go = Object.Instantiate(prefab);

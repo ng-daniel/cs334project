@@ -56,7 +56,7 @@ namespace WFC
             BuildAdjacencies();
 
             Chunk chunk = new Chunk(0, 0);
-            bool success = Generate(chunk);
+            Generate(chunk);
         }
 
         private void AddModule(string name, int bitmap, int symmetry)
