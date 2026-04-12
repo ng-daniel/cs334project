@@ -13,6 +13,8 @@ namespace Assets.Scripts.Player
         InputAction lookAction;
         InputAction moveAction;
         InputAction jumpAction;
+        InputAction interactAction;
+        InputAction crouchAction;
 
         PlayerController playerController;
 
@@ -21,6 +23,9 @@ namespace Assets.Scripts.Player
             lookAction = InputSystem.actions.FindAction("Look");
             moveAction = InputSystem.actions.FindAction("Move");
             jumpAction = InputSystem.actions.FindAction("Jump");
+            interactAction = InputSystem.actions.FindAction("Interact");
+            crouchAction = InputSystem.actions.FindAction("Crouch");
+
             playerController = FindFirstObjectByType<PlayerController>();
             if (playerController == null)
             {
@@ -31,10 +36,12 @@ namespace Assets.Scripts.Player
         void OnEnable()
         {
             jumpAction.started += OnJumpStart;
+            interactAction.started += OnInteractStart;
         }
         void OnDisable()
         {
             jumpAction.started -= OnJumpStart;
+            interactAction.started -= OnInteractStart;
         }
 
         void Update()
@@ -52,13 +59,43 @@ namespace Assets.Scripts.Player
             {
                 playerController.Move(moveValue);
             }
+
+            bool jumping = jumpAction.ReadValue<float>() > 0.1f;
+            bool crouching = crouchAction.ReadValue<float>() > 0.1f;
+            if (jumping && !crouching)
+            {
+                playerController.TryFlyIfDebug(true);
+            }
+            else if (crouching && !jumping)
+            {
+                playerController.TryFlyIfDebug(false);
+            }
+            else
+            {
+                playerController.TryStopFlyIfDebug();
+            }
         }
-        public void OnJumpStart(InputAction.CallbackContext context)
+        void OnJumpStart(InputAction.CallbackContext context)
         {
             if (!playerController.GetJumpBehavior().TryStartJump())
             {
                 Debug.Log("Jump failed: player is not grounded.");
             }
+        }
+
+        void OnFlyUp(InputAction.CallbackContext context)
+        {
+            playerController.TryFlyIfDebug(true);
+        }
+
+        void OnFlyDown(InputAction.CallbackContext context)
+        {
+            playerController.TryFlyIfDebug(false);
+        }
+
+        void OnInteractStart(InputAction.CallbackContext context)
+        {
+            playerController.ToggleDebugMode();
         }
     }
 }
