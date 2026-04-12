@@ -4,8 +4,9 @@ namespace WFC
     {
         public Slot[] slots;
         public int chunkSize = 0;
+        public float levelHeight = 0; // height of the level itself
 
-        public Level(Chunk chunk, int chunkSize)
+        public Level(Chunk chunk, int chunkSize, float levelHeight)
         {
             this.chunkSize = chunkSize;
 
@@ -15,6 +16,8 @@ namespace WFC
             {
                 slots[i] = new Slot(chunk, GetX(i), GetY(i));
             }
+
+            this.levelHeight = levelHeight;
         }
         public Slot GetSlot(int x, int y)
         {

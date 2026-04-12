@@ -10,11 +10,13 @@ namespace WFC
         public int chunkY;
         public Level level;
 
+        public BuildingGenerator buildingGenerator;
+
         public Chunk(int chunkX, int chunkY)
         {
             this.chunkX = chunkX;
             this.chunkY = chunkY;
-            level = new Level(this, CHUNK_SIZE);
+            level = new Level(this, CHUNK_SIZE, 0.0f);
         }
 
         public void PostGeneration()

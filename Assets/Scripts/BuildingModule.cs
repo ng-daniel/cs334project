@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BuildingModule", menuName = "Scriptable Objects/BuildingModule")]
 public class BuildingModule : ScriptableObject
 {
+    [HideInInspector]
+    public const float GRID_SIZE = 30.0f;
+
     public enum ModelType {
-        AIR,
+        AIR, // Skip this grid cell, but a block/
         SOLID,
         FLOATING,
         TIP
@@ -22,30 +26,46 @@ public class BuildingModule : ScriptableObject
         NEGATIVE_CORRELATION // Height decreases, chance decrease
     }
 
-    public ModelType modelType;
+    public GameObject prefab;
+    public ModelType modelType = ModelType.SOLID;
+    public ChanceType chanceType = ChanceType.CONSTANT;
+
+    public List<ModelType> CanStackOn; // modules that this type can stack on
+
+    private void Awake()
+    {
+        BuildStackList();
+    }
 
     /// <summary>
     /// Whether the input module can stack on top of this one
     /// </summary>
-    public bool CanStack(BuildingModule other)
+    public void BuildStackList()
     {
-        switch (this.type)
+        CanStackOn = new List<ModelType>();
+        switch (this.modelType)
         {
             case ModelType.AIR:
-                return (other.modelType == ModelType.FLOATING);
+                CanStackOn.Add(ModelType.FLOATING);
+                CanStackOn.Add(ModelType.SOLID);
+                break;
             case ModelType.SOLID:
-                return (other.modelType == ModelType.SOLID) ||
-                       (other.modelType == ModelType.AIR) ||
-                       (other.modelType == ModelType.;
+                CanStackOn.Add(ModelType.AIR);
+                CanStackOn.Add(ModelType.SOLID);
+                CanStackOn.Add(ModelType.FLOATING);
+                CanStackOn.Add(ModelType.TIP);
                 break;
             case ModelType.FLOATING:
+                CanStackOn.Add(ModelType.FLOATING);
+                CanStackOn.Add(ModelType.AIR);
+                CanStackOn.Add(ModelType.SOLID);
                 break;
             case ModelType.TIP:
+                // Cannot stack anything
                 break;
             default:
                 Debug.LogError("Invalid building module type.");
-                return false;
-
+                break;
         }
     }
 
@@ -55,7 +75,13 @@ public class BuildingModule : ScriptableObject
     /// <param name="pos"></param>
     public void draw(Vector3 pos)
     {
+        if (!prefab || this.modelType == ModelType.AIR)
+        {
+            return;
+        }
 
+        GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
+        obj.transform.localScale = new Vector3(GRID_SIZE, GRID_SIZE, GRID_SIZE);
     }
 
 }
