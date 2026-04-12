@@ -8,7 +8,7 @@ namespace WFC
 
         public int chunkX;
         public int chunkY;
-        public Level level;
+        public Level<Slot> level;
 
         public BuildingGenerator buildingGenerator;
 
@@ -16,7 +16,14 @@ namespace WFC
         {
             this.chunkX = chunkX;
             this.chunkY = chunkY;
-            level = new Level(this, CHUNK_SIZE, 0.0f);
+            level = new Level<Slot>(this, CHUNK_SIZE, 0.0f);
+
+            this.buildingGenerator = new BuildingGenerator(this);
+
+            for (int i = 0; i < level.slots.Length; i++)
+            {
+                level.slots[i] = new Slot(this, level.GetX(i), level.GetY(i));
+            }
         }
 
         public void PostGeneration()

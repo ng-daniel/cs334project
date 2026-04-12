@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using WFC;
 
 public class GenerationManager : MonoBehaviour
@@ -8,9 +9,13 @@ public class GenerationManager : MonoBehaviour
     public WFCGenerator wfc;
     public GameObject cube;
 
+    [SerializeField]
+    public List<BuildingModule> buildingModulesList;
+
     void Start()
     {
         instance = this;
+
         wfc = new WFCGenerator();
 
         wfc.AddModule("Empty", 0b0000, 90, 4f);
@@ -23,6 +28,10 @@ public class GenerationManager : MonoBehaviour
         wfc.BuildAdjacencies();
 
         Chunk chunk = new Chunk(0, 0);
+
+        chunk.buildingGenerator.AddLevel(0.0f);
+        chunk.buildingGenerator.DebugDraw();
+
         wfc.Generate(chunk);
         chunk.PostGeneration();
     }

@@ -1,41 +1,36 @@
-namespace WFC
+using System.Numerics;
+using WFC;
+
+public class Level<T>
 {
-    public class Level
+    public readonly Chunk chunk;
+
+    public T[] slots;
+    public float levelHeight = 0; // height of the level itself
+
+    public Level(WFC.Chunk chunk, int chunkSize, float levelHeight)
     {
-        public Slot[] slots;
-        public int chunkSize = 0;
-        public float levelHeight = 0; // height of the level itself
+        this.chunk = chunk;
+        this.slots = new T[chunkSize * chunkSize];
 
-        public Level(Chunk chunk, int chunkSize, float levelHeight)
+        this.levelHeight = levelHeight;
+    }
+    public T GetSlot(int x, int y)
+    {
+        if (x < 0 || x >= WFC.Chunk.CHUNK_SIZE || y < 0 || y >= WFC.Chunk.CHUNK_SIZE)
         {
-            this.chunkSize = chunkSize;
-
-            this.slots = new Slot[chunkSize * chunkSize];
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                slots[i] = new Slot(chunk, GetX(i), GetY(i));
-            }
-
-            this.levelHeight = levelHeight;
+            return default(T);
         }
-        public Slot GetSlot(int x, int y)
-        {
-            if (x < 0 || x >= chunkSize || y < 0 || y >= chunkSize)
-            {
-                return null;
-            }
-            return slots[y * chunkSize + x];
-        }
+        return slots[y * WFC.Chunk.CHUNK_SIZE + x];
+    }
 
-        public int GetX(int slotIndex)
-        {
-            return slotIndex % chunkSize;
-        }
+    public int GetX(int slotIndex)
+    {
+        return slotIndex % WFC.Chunk.CHUNK_SIZE;
+    }
 
-        public int GetY(int slotIndex)
-        {
-            return slotIndex / chunkSize;
-        }
+    public int GetY(int slotIndex)
+    {
+        return slotIndex / WFC.Chunk.CHUNK_SIZE;
     }
 }

@@ -71,7 +71,7 @@ namespace WFC
             return new Vector3(x * SLOT_SIZE, chunk.level.levelHeight, y * SLOT_SIZE);
         }
 
-        public void Spawn()
+        public virtual void Spawn()
         {
             bool empty = true;
 
