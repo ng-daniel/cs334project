@@ -6,6 +6,7 @@ namespace Assets.Scripts.Player
     {
         Rigidbody rb;
         [SerializeField] JumpStats jumpStats;
+        [SerializeField] float flySpeed;
 
         private void Awake()
         {
@@ -21,6 +22,17 @@ namespace Assets.Scripts.Player
                 return true;
             }
             return false;
+        }
+
+        public void Fly(bool isUpwards)
+        {
+            float flyForce = isUpwards ? flySpeed : -flySpeed;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, flyForce, rb.linearVelocity.z);
+        }
+
+        public void StopFly()
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         }
 
         public bool IsGrounded()

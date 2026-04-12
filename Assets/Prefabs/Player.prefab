@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Input.MovementBehavior
   moveStats: {fileID: 11400000, guid: 343c35aae459fcc439d3d9ed80459778, type: 2}
+  debugMoveStats: {fileID: 11400000, guid: 1e9ffee6bb8c8324b8d346a2f0ea252d, type: 2}
 --- !u!114 &5651871614016333847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,3 +198,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpBehavior
   jumpStats: {fileID: 11400000, guid: bb3fcbdba3b87df4882600389abb8af5, type: 2}
+  flySpeed: 25

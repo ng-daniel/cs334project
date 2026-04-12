@@ -10,19 +10,32 @@ namespace Assets.Scripts.Player
     public class MovementBehavior : MonoBehaviour
     {
         Rigidbody rb;
+        Collider col;
+        bool debugMode = false;
         [SerializeField] MovementStats moveStats;
+        [SerializeField] MovementStats debugMoveStats;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            col = GetComponent<Collider>();
+        }
+        public void MoveRegular(Vector2 rawInput)
+        {
+            Move(rawInput, moveStats);
+        }
+        public void MoveDebug(Vector2 rawInput)
+        {
+            Move(rawInput, debugMoveStats);
         }
 
         /// <summary>
         /// Moves the player based on input values with acceleration and speed limits.
         /// </summary>
-        /// <param name="value">The input vector representing the desired movement direction.</param>
-        public void Move(Vector2 rawInput)
-        {
+        /// <param name="rawInput">The input vector representing the desired movement direction.</param>
+        /// <param name="moveStats">The movement stats to use for this movement.</param>
+        void Move(Vector2 rawInput, MovementStats moveStats)
+        {   
             const float inputThreshold = 0.01f;
             float dt = Time.fixedDeltaTime;
 
