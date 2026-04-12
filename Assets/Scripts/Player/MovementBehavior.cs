@@ -10,15 +10,12 @@ namespace Assets.Scripts.Player
     public class MovementBehavior : MonoBehaviour
     {
         Rigidbody rb;
-        Collider col;
-        bool debugMode = false;
         [SerializeField] MovementStats moveStats;
         [SerializeField] MovementStats debugMoveStats;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            col = GetComponent<Collider>();
         }
         public void MoveRegular(Vector2 rawInput)
         {

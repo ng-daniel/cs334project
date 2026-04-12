@@ -68,13 +68,8 @@ namespace Assets.Scripts.Player
         public void Look(Vector2 lookInput)
         {
             Quaternion result = lookBehavior.LookToQuaternion(lookInput);
-            
-            // ensure the player's horizontal rotation matches the look direction while keeping the player upright
-            Vector3 flattenedForward = Vector3.ProjectOnPlane(result * Vector3.forward, Vector3.up);
-            if (flattenedForward.sqrMagnitude > 0.0001f)
-            {
-                transform.rotation = Quaternion.LookRotation(flattenedForward, Vector3.up);
-            }
+            Quaternion horizontalRotation = Quaternion.Euler(0, result.eulerAngles.y, 0);
+            transform.rotation = horizontalRotation;
 
             if (fpsCameraBehavior != null)
             {
