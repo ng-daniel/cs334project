@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05b18573a9c749546842d8c893d09a10, type: 3}
   m_Name: PlayerMoveDebugStats
   m_EditorClassIdentifier: Assembly-CSharp::MovementStats
-  WalkSpeed: 50
-  WalkSpeedAccel: 100
+  WalkSpeed: 25
+  WalkSpeedAccel: 1000
