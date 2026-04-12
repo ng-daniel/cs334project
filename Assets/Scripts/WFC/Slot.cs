@@ -61,7 +61,7 @@ namespace WFC
 
         public Slot Neighbor(int d)
         {
-            return chunk.GetSlot(slotX + Direction.OffsetX(d), slotY + Direction.OffsetY(d));
+            return chunk.level.GetSlot(slotX + Direction.OffsetX(d), slotY + Direction.OffsetY(d));
         }
 
         public Vector3 WorldPos()
