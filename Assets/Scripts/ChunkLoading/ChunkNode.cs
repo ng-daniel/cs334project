@@ -11,7 +11,7 @@ namespace Assets.Scripts.ChunkLoading
         public ChunkNode(Vector2Int coords)
         {
             this.coords = coords;
-            this.pathChunk = new Chunk(coords.x, coords.y);
+            pathChunk = new Chunk(coords.x, coords.y);
         }
 
         public void Load()
@@ -22,7 +22,6 @@ namespace Assets.Scripts.ChunkLoading
         public void Unload()
         {
             // Implementation for unloading the chunk (e.g., destroy GameObjects, clean up data structures, etc.)
-            Debug.Log($"Unloading chunk at {coords}...if I kept track of the GameObjects I created for this chunk :(");
         }
     }
 }

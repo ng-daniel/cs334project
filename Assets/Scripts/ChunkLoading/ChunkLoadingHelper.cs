@@ -14,8 +14,8 @@ namespace Assets.Scripts.ChunkLoading
         /// <returns>The chunk coordinates as a Vector2Int.</returns>
         public static Vector2Int GetChunkCoords(Vector3 position)
         {
-            int chunkX = Mathf.FloorToInt(position.x / Chunk.CHUNK_SIZE);
-            int chunkY = Mathf.FloorToInt(position.z / Chunk.CHUNK_SIZE);
+            int chunkX = Mathf.FloorToInt(position.x / ChunkLoadingManager.CHUNK_SIZE_RAW);
+            int chunkY = Mathf.FloorToInt(position.z / ChunkLoadingManager.CHUNK_SIZE_RAW);
             return new Vector2Int(chunkX, chunkY);
         }
 
@@ -42,50 +42,6 @@ namespace Assets.Scripts.ChunkLoading
                 }
             }
             return chunksInRange;
-        }
-
-        /// <summary>
-        /// Given two lists of chunk coordinates (old and new), determine which chunks
-        /// need to be removed (in old but not in new) and which need to be added (in new but not in old).
-        /// </summary>
-        /// <param name="oldChunks">The list of chunk coordinates that were previously active.</param>
-        /// <param name="newChunks">The list of chunk coordinates that are currently active.</param>
-        /// <returns>A list of chunk coordinates that need to be removed.</returns>
-        public static List<Vector2Int> GetChunksToUnload(List<Vector2Int> oldChunks, List<Vector2Int> newChunks)
-        {
-            List<Vector2Int> chunksToRemove = new List<Vector2Int>();
-
-            foreach (Vector2Int chunk in oldChunks)
-            {
-                if (!newChunks.Contains(chunk))
-                {
-                    chunksToRemove.Add(chunk);
-                }
-            }
-
-            return chunksToRemove;
-        }
-
-        /// <summary>
-        /// Given two lists of chunk coordinates (old and new), determine which chunks
-        /// need to be added (in new but not in old).
-        /// </summary>
-        /// <param name="oldChunks">The list of chunk coordinates that were previously active.</param>
-        /// <param name="newChunks">The list of chunk coordinates that are currently active.</param>
-        /// <returns>A list of chunk coordinates that need to be added.</returns>
-        public static List<Vector2Int> GetChunksToLoad(List<Vector2Int> oldChunks, List<Vector2Int> newChunks)
-        {
-            List<Vector2Int> chunksToAdd = new List<Vector2Int>();
-
-            foreach (Vector2Int chunk in newChunks)
-            {
-                if (!oldChunks.Contains(chunk))
-                {
-                    chunksToAdd.Add(chunk);
-                }
-            }
-
-            return chunksToAdd;
         }
     }
 }

@@ -343,6 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f33c17de5cd4843859d11168a0a8ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ChunkLoading.ChunkLoadingManager
+  playerChunkCoords: {x: 0, y: 0}
 --- !u!4 &1274982618
 Transform:
   m_ObjectHideFlags: 0
@@ -665,15 +666,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5452733635317100, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.18313
+      value: 5.4
       objectReference: {fileID: 0}
     - target: {fileID: 5452733635317100, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.183
+      value: 15.5
       objectReference: {fileID: 0}
     - target: {fileID: 5452733635317100, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.53465
+      value: 5.8
       objectReference: {fileID: 0}
     - target: {fileID: 5452733635317100, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
       propertyPath: m_LocalRotation.w

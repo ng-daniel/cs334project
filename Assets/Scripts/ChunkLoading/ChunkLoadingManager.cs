@@ -1,19 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 using WFC;
+using Assets.Scripts.Player;
 
 namespace Assets.Scripts.ChunkLoading
 {
     public class ChunkLoadingManager : MonoBehaviour
     {
+        public static int CHUNK_SIZE_RAW = Chunk.CHUNK_SIZE * (int)Slot.SLOT_SIZE;
+        public static ChunkLoadingManager instance;
         Dictionary<Vector2Int, ChunkNode> activeChunks = new Dictionary<Vector2Int, ChunkNode>();
-        Vector2Int playerChunkCoords;
+        [SerializeField]Vector2Int playerChunkCoords;
         int chunkLoadRadius = 2; // How many chunks away from the player should be loaded
         int chunkUnloadRadius = 3; // How many chunks away from the player should be unloaded
 
+        GameObject player;
+
         public void Start()
         {
-            InitializeChunks(this.transform);
+            instance = this;
+
+            try
+            {
+                player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().gameObject;
+                InitializeChunks(player.transform);
+            }
+            catch
+            {
+                Debug.LogError("PlayerController / Player Prefab not found in scene.");
+                InitializeChunks(this.transform);
+            }
         }
 
         /// <summary>
@@ -23,11 +40,14 @@ namespace Assets.Scripts.ChunkLoading
         public void InitializeChunks(Transform startingTransform)
         {
             playerChunkCoords = ChunkLoadingHelper.GetChunkCoords(startingTransform.position);
-            List<Vector2Int> initialChunks = ChunkLoadingHelper.GetChunkCoordsInRadius(playerChunkCoords, 1);
+            UpdateChunks(playerChunkCoords, playerChunkCoords);
+        }
 
-            foreach (Vector2Int chunkCoords in initialChunks)
+        public void Update()
+        {
+            if (player != null)
             {
-                LoadChunk(chunkCoords);
+                OnPlayerCoordsChanged(player.transform.position);
             }
         }
 
@@ -41,6 +61,37 @@ namespace Assets.Scripts.ChunkLoading
             }
         }
 
+        private void UpdateChunks(Vector2Int oldPlayerChunkCoords, Vector2Int newPlayerChunkCoords)
+        {
+            // Implementation for updating chunks based on player movement
+            List<Vector2Int> loadMaybe = ChunkLoadingHelper.GetChunkCoordsInRadius(newPlayerChunkCoords, chunkLoadRadius);
+            List<Vector2Int> chunksToKeep = ChunkLoadingHelper.GetChunkCoordsInRadius(oldPlayerChunkCoords, chunkUnloadRadius);
+            print(loadMaybe.Count);
+
+            // only unload chunks that are actively loaded and not in the keep radius
+            // only load chunks that are in loadMaybe and not actively loaded, and
+            int n_loaded = 0;
+            int n_unloaded = 0;
+            List<Vector2Int> activeChunkCoords = new List<Vector2Int>(activeChunks.Keys);
+            for (int i = 0; i < activeChunkCoords.Count; i++)
+            {
+                if (!chunksToKeep.Contains(activeChunkCoords[i]))
+                {
+                    n_unloaded++;
+                    UnloadChunk(activeChunkCoords[i]);
+                }
+            }
+            for (int i = 0; i < loadMaybe.Count; i++)
+            {
+                if (!activeChunks.ContainsKey(loadMaybe[i]))
+                {
+                    n_loaded++;
+                    LoadChunk(loadMaybe[i]);
+                }
+            }
+
+            print($"UpdateChunks Result: {n_loaded} chunks loaded, {n_unloaded} chunks unloaded, {activeChunks.Count} total active chunks");
+        }
         private void LoadChunk(Vector2Int chunkCoords)
         {
             if (!activeChunks.ContainsKey(chunkCoords))
@@ -50,7 +101,6 @@ namespace Assets.Scripts.ChunkLoading
                 activeChunks.Add(chunkCoords, chunkNode);
             }
         }
-
         private void UnloadChunk(Vector2Int chunkCoords)
         {
             if (activeChunks.ContainsKey(chunkCoords))
@@ -61,24 +111,16 @@ namespace Assets.Scripts.ChunkLoading
             }
         }
 
-        private void UpdateChunks(Vector2Int oldPlayerChunkCoords, Vector2Int newPlayerChunkCoords)
+        public void OnDrawGizmos()
         {
-            // Implementation for updating chunks based on player movement
-            List<Vector2Int> newChunks = ChunkLoadingHelper.GetChunkCoordsInRadius(newPlayerChunkCoords, chunkLoadRadius);
-            List<Vector2Int> oldChunks = ChunkLoadingHelper.GetChunkCoordsInRadius(oldPlayerChunkCoords, chunkUnloadRadius);
-
-            List<Vector2Int> chunksToLoad = ChunkLoadingHelper.GetChunksToLoad(oldChunks, newChunks);
-            List<Vector2Int> chunksToUnload = ChunkLoadingHelper.GetChunksToUnload(oldChunks, newChunks);
-
-            foreach (Vector2Int chunkCoords in chunksToLoad)
+            // Draw wire cubes around loaded chunks for debugging
+            Gizmos.color = Color.green;
+            foreach (Vector2Int chunkCoords in activeChunks.Keys)
             {
-                LoadChunk(chunkCoords);
-            }
-
-            foreach (Vector2Int chunkCoords in chunksToUnload)
-            {
-                UnloadChunk(chunkCoords);
+                Vector3 chunkCenter = new Vector3(chunkCoords.x * CHUNK_SIZE_RAW + CHUNK_SIZE_RAW / 2f, 0, chunkCoords.y * CHUNK_SIZE_RAW + CHUNK_SIZE_RAW / 2f);
+                Gizmos.DrawWireCube(chunkCenter, new Vector3(CHUNK_SIZE_RAW, 1, CHUNK_SIZE_RAW));
             }
         }
+
     }
 }
