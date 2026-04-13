@@ -8,7 +8,7 @@ public class GenerationManager : MonoBehaviour
     public WFCGenerator wfc;
     public GameObject cube;
 
-    void Start()
+    void Awake()
     {
         instance = this;
         wfc = new WFCGenerator();
