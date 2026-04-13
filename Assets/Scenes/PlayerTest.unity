@@ -178,7 +178,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -343,7 +343,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f33c17de5cd4843859d11168a0a8ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ChunkLoading.ChunkLoadingManager
-  playerChunkCoords: {x: 0, y: 0}
+  initialChunkRadius: 3
+  chunkLoadRadius: 2
+  chunkUnloadRadius: 4
 --- !u!4 &1274982618
 Transform:
   m_ObjectHideFlags: 0
