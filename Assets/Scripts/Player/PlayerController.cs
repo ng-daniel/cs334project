@@ -73,7 +73,7 @@ namespace Assets.Scripts.Player
 
             if (fpsCameraBehavior != null)
             {
-                fpsCameraBehavior.SetLookDirection(result);
+                fpsCameraBehavior.SetLookDirectionSmooth(result);
             }
         }
 

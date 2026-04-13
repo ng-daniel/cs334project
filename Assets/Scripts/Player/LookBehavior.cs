@@ -10,7 +10,7 @@ namespace Assets.Scripts.Player
     public class LookBehavior : MonoBehaviour
     {
         Vector2 rotation;
-        [SerializeField] float lookSensitivity = 1.0f;
+        [SerializeField] float lookSensitivity = 0.25f;
 
         public void Start()
         {

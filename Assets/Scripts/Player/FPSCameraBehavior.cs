@@ -6,7 +6,7 @@ namespace Assets.Scripts.Player
 {
     /// <summary>
     /// Handles movement input and applies it to a Rigidbody.
-    /// </summary>``
+    /// </summary>
     public class FPSCameraBehavior : MonoBehaviour
     {
         Camera cam;
@@ -20,6 +20,7 @@ namespace Assets.Scripts.Player
             }
         }            
 
+
         public void MatchPosition(Transform target)
         {
             cam.transform.position = target.position;
@@ -28,5 +29,10 @@ namespace Assets.Scripts.Player
         {
             cam.transform.rotation = rotation;
         }
+        public void SetLookDirectionSmooth(Quaternion rotation, float smoothTime = 0.1f)
+        {
+            cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, rotation, smoothTime);
+        }
+
     }
 }

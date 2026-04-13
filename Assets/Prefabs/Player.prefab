@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20c4fc0396e122340b5874cbd8dc15cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.LookBehavior
-  lookSensitivity: 1
+  lookSensitivity: 0.25
 --- !u!114 &6257144085792371524
 MonoBehaviour:
   m_ObjectHideFlags: 0
