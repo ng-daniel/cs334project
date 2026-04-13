@@ -11,9 +11,10 @@ namespace Assets.Scripts.ChunkLoading
         public static int CHUNK_SIZE_RAW = Chunk.CHUNK_SIZE * (int)Slot.SLOT_SIZE;
         public static ChunkLoadingManager instance;
         Dictionary<Vector2Int, ChunkNode> activeChunks = new Dictionary<Vector2Int, ChunkNode>();
-        [SerializeField]Vector2Int playerChunkCoords;
-        int chunkLoadRadius = 2; // How many chunks away from the player should be loaded
-        int chunkUnloadRadius = 3; // How many chunks away from the player should be unloaded
+        Vector2Int playerChunkCoords;
+        [SerializeField] int initialChunkRadius = 2; // Initial chunks within this radius will be loaded on start
+        [SerializeField] int chunkLoadRadius = 2; // Empty chunks at this radius or closer will be loaded
+        [SerializeField] int chunkUnloadRadius = 3; // Chunks more than this value away from the player will be unloaded
 
         GameObject player;
 
