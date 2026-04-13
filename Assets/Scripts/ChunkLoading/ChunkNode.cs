@@ -21,7 +21,10 @@ namespace Assets.Scripts.ChunkLoading
 
         public void Unload()
         {
-            // Implementation for unloading the chunk (e.g., destroy GameObjects, clean up data structures, etc.)
+            foreach (Slot slot in pathChunk.slots)
+            {
+                slot.Unload();
+            }
         }
     }
 }
