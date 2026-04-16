@@ -300,10 +300,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6637feac5ef1964c8914cf56fb2ad05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GenerationManager
-  cube: {fileID: 810697690233472171, guid: 5c934a81be3f96d4b96f688cf647c48e, type: 3}
+  cube: {fileID: 3121095178061768908, guid: 35093972e2764144489c581c4fd76066, type: 3}
   buildingModulesList:
   - {fileID: 11400000, guid: 09cef5b547a76d8448b41c18f3810723, type: 2}
   - {fileID: 11400000, guid: 0a8db966e632b2543bd16ca4dfa25f90, type: 2}
+  - {fileID: 11400000, guid: fc5c0455e0e901a4cb2969598a6f595e, type: 2}
+  - {fileID: 11400000, guid: 2c01abc76e18ad74d9fe6dc2232e7f00, type: 2}
+  numRectsInFirstLevel: 2
 --- !u!1 &1340263109
 GameObject:
   m_ObjectHideFlags: 0

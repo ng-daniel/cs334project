@@ -24,9 +24,9 @@ public class BuildingGenerator
         AddFirstLevel();
 
         // Currently spacing building layers out evenly
-        //for (float zPos = Slot.SLOT_HEIGHT; zPos < Chunk.CHUNK_SIZE; zPos += Slot.SLOT_HEIGHT)
+        //for (float zPos = BuildingSlot.SLOT_SIZE; zPos < Chunk.CHUNK_SIZE; zPos += BuildingSlot.SLOT_HEIGHT)
         //{
-            AddNextLayer(Slot.SLOT_HEIGHT);
+            //AddNextLayer(BuildingSlot.SLOT_SIZE);
         //}
     }
 

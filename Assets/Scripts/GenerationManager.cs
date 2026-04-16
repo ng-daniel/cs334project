@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using WFC;
 
@@ -53,6 +54,8 @@ public class GenerationManager : MonoBehaviour
                 compatibleModules.Add(module);
             }
         }
+
+        Assert.Greater(compatibleModules.Count, 0);
 
         // Choose random from list
         // Assign random module

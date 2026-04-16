@@ -33,24 +33,48 @@ public class BuildingModule : ScriptableObject
     /// </summary>
     public bool CanStackOnType(ModelType below)
     {
-        switch (this.modelType)
+        switch (below)
         {
+            // below empty, this can be empty TODO add floating very low chance
             case ModelType.EMPTY:
-                return below == ModelType.FLOATING ||
-                       below == ModelType.EMPTY ||
-                       below == ModelType.SOLID;
+                return this.modelType == ModelType.EMPTY;
+            // Anything can stack on solid
             case ModelType.SOLID:
-                return true;
+                return this.modelType == ModelType.SOLID || 
+                       this.modelType == ModelType.EMPTY ||
+                       this.modelType == ModelType.TIP ||
+                       this.modelType == ModelType.FLOATING;
+            // Air/floating can stack on floating
             case ModelType.FLOATING:
-                return below == ModelType.FLOATING || 
-                       below == ModelType.EMPTY || 
-                       below == ModelType.SOLID;
+                return this.modelType == ModelType.EMPTY ||
+                       this.modelType == ModelType.FLOATING;
+            // Empty can stack on tip
             case ModelType.TIP:
-                return below == ModelType.SOLID;
+                return this.modelType == ModelType.EMPTY;
             default:
-                Debug.LogError("Invalid building module type.");
+                Debug.LogError("Model type is not valid.");
                 return false;
         }
+
+        //switch (this.modelType)
+        //{
+        //    case ModelType.EMPTY:
+        //        return below == ModelType.FLOATING ||
+        //               below == ModelType.EMPTY ||
+        //               below == ModelType.SOLID ||
+        //               below == ModelType.TIP;
+        //    case ModelType.SOLID:
+        //        return true;
+        //    case ModelType.FLOATING:
+        //        return below == ModelType.FLOATING || 
+        //               below == ModelType.EMPTY || 
+        //               below == ModelType.SOLID;
+        //    case ModelType.TIP:
+        //        return below == ModelType.SOLID;
+        //    default:
+        //        Debug.LogError("Invalid building module type.");
+        //        return false;
+        //}
     }
 
 }
