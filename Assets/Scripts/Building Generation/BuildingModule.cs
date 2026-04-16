@@ -55,26 +55,6 @@ public class BuildingModule : ScriptableObject
                 Debug.LogError("Model type is not valid.");
                 return false;
         }
-
-        //switch (this.modelType)
-        //{
-        //    case ModelType.EMPTY:
-        //        return below == ModelType.FLOATING ||
-        //               below == ModelType.EMPTY ||
-        //               below == ModelType.SOLID ||
-        //               below == ModelType.TIP;
-        //    case ModelType.SOLID:
-        //        return true;
-        //    case ModelType.FLOATING:
-        //        return below == ModelType.FLOATING || 
-        //               below == ModelType.EMPTY || 
-        //               below == ModelType.SOLID;
-        //    case ModelType.TIP:
-        //        return below == ModelType.SOLID;
-        //    default:
-        //        Debug.LogError("Invalid building module type.");
-        //        return false;
-        //}
     }
 
 }

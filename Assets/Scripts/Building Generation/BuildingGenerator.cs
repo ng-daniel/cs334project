@@ -21,7 +21,7 @@ public class BuildingGenerator
     {
         Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
 
-        AddFirstLevel();
+        //AddFirstLevel();
 
         // Currently spacing building layers out evenly
         //for (float zPos = BuildingSlot.SLOT_SIZE; zPos < Chunk.CHUNK_SIZE; zPos += BuildingSlot.SLOT_HEIGHT)
