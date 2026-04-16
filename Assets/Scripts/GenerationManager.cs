@@ -12,6 +12,9 @@ public class GenerationManager : MonoBehaviour
     [SerializeField]
     public List<BuildingModule> buildingModulesList;
 
+    [SerializeField]
+    public int numRectsInFirstLevel = 2; // Num of rectangles filled in first layer per chunk
+
     void Start()
     {
         instance = this;
@@ -29,7 +32,7 @@ public class GenerationManager : MonoBehaviour
 
         Chunk chunk = new Chunk(0, 0);
 
-        chunk.buildingGenerator.AddLevel(0.0f);
+        chunk.buildingGenerator.GenerateLevels();
         chunk.buildingGenerator.DebugDraw();
 
         wfc.Generate(chunk);

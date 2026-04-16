@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.Hierarchy;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -15,10 +16,62 @@ public class BuildingGenerator
         this.chunk = chunk;
         this.buildingMap = new List<Level<BuildingSlot>>();
     }
-    public void AddLevel(float levelHeight)
+
+    public void GenerateLevels()
+    {
+        AddFirstLevel();
+
+        // Currently spacing building layers out evenly
+        //for (float zPos = Slot.SLOT_HEIGHT; zPos < Chunk.CHUNK_SIZE; zPos += Slot.SLOT_HEIGHT)
+        //{
+            AddNextLayer(Slot.SLOT_HEIGHT);
+        //}
+    }
+
+    private void AddNextLayer(float zPos)
+    {
+        Level<BuildingSlot> prevLevel = buildingMap[buildingMap.Count - 1];
+        Level<BuildingSlot> newLevel = new Level<BuildingSlot>(chunk, zPos);
+
+        for (int i = 0; i < prevLevel.slots.Length; i++)
+        {
+            int xPos = prevLevel.GetX(i);
+            int yPos = prevLevel.GetY(i);
+
+            // Get the slot below ("old") and new slot
+            BuildingSlot oldSlot = prevLevel.slots[i];
+
+            //Assert oldModule is defined and not null
+            Assert.IsNotNull(oldSlot.buildingModule);
+
+            BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos);
+
+            // Set the building module of the new slot
+            if (oldSlot.buildingModule.modelType == BuildingModule.ModelType.SOLID)
+            {
+                if (Random.value < 0.22)
+                {
+                    newSlot.buildingModule.modelType = BuildingModule.ModelType.EMPTY;
+                }
+                else
+                {
+                    newSlot.buildingModule.modelType = BuildingModule.ModelType.SOLID;
+                }
+            }
+
+            
+            newLevel.slots[i] = newSlot;
+        }
+
+        // TODO: consider adding floating objects with a random chance
+
+        buildingMap.Add(newLevel);
+    }
+
+    private void AddFirstLevel()
     {
 
-        Level<BuildingSlot> level = new Level<BuildingSlot>(chunk, Chunk.CHUNK_SIZE, levelHeight);
+        Level<BuildingSlot> level = new Level<BuildingSlot>(chunk, 0.0f);
         List<BuildingModule> modulesList = GenerationManager.instance.buildingModulesList;
 
         if (modulesList == null || modulesList.Count == 0)
@@ -27,20 +80,14 @@ public class BuildingGenerator
             return;
         }
 
-        // temp - randomly fill the building map
+        // Temp: randomly fill the building map
         for (int i = 0; i < level.slots.Length; i++)
         {
             level.slots[i] = new BuildingSlot(chunk, level.GetX(i), level.GetY(i));
 
-            if (Random.Range(0, 10) < 2)
-            {
-                // Assign random module
-                int randInd = Random.Range(0, modulesList.Count);
-                level.slots[i].buildingModule = modulesList[randInd];
-            } else
-            {
-                level.slots[i].buildingModule = modulesList[0];
-            }
+            // Assign random module
+            int randInd = Random.Range(0, modulesList.Count);
+            level.slots[i].buildingModule = modulesList[randInd];
         }
         
         buildingMap.Add(level);
