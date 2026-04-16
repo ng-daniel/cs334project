@@ -33,8 +33,9 @@ public class BuildingSlot : Slot
 
         Vector3 pos = WorldPos();
 
-        this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab, pos, Quaternion.identity);
-        this.instantiatedPrefab.transform.localScale *= SLOT_SIZE;
+        this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab);
+        this.instantiatedPrefab.transform.position = pos;
+        this.instantiatedPrefab.transform.localScale = new Vector3(SLOT_HEIGHT, SLOT_HEIGHT, SLOT_HEIGHT) * 10;
     }
 
 

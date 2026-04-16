@@ -34,7 +34,7 @@ public class GenerationManager : MonoBehaviour
         Chunk chunk = new Chunk(0, 0);
 
         chunk.buildingGenerator.GenerateLevels();
-        //chunk.buildingGenerator.DebugDraw();
+        chunk.buildingGenerator.DebugDraw();
 
         wfc.Generate(chunk);
         chunk.PostGeneration();

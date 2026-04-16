@@ -21,13 +21,13 @@ public class BuildingGenerator
     {
         Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
 
-        //AddFirstLevel();
+        AddFirstLevel();
 
         // Currently spacing building layers out evenly
-        //for (float zPos = BuildingSlot.SLOT_SIZE; zPos < Chunk.CHUNK_SIZE; zPos += BuildingSlot.SLOT_HEIGHT)
-        //{
-            //AddNextLayer(BuildingSlot.SLOT_SIZE);
-        //}
+        for (float zPos = 10; zPos < Chunk.CHUNK_SIZE; zPos += BuildingSlot.SLOT_HEIGHT)
+        {
+            AddNextLayer(zPos);
+        }
     }
 
     private void AddNextLayer(float zPos)
@@ -76,8 +76,14 @@ public class BuildingGenerator
             level.slots[i] = new BuildingSlot(chunk, level.GetX(i), level.GetY(i));
 
             // Assign random module
-            int randInd = Random.Range(0, modulesList.Count);
-            level.slots[i].buildingModule = modulesList[randInd];
+            if (Random.value < 0.1)
+            {
+                int randInd = Random.Range(0, modulesList.Count);
+                level.slots[i].buildingModule = modulesList[1]; // solid
+            } else
+            {
+                level.slots[i].buildingModule = modulesList[0]; // empty
+            }
         }
         
         buildingMap.Add(level);
