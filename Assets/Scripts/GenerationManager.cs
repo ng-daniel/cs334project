@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using WFC;
 
 public class GenerationManager : MonoBehaviour
@@ -23,9 +24,15 @@ public class GenerationManager : MonoBehaviour
         wfc.BuildAdjacencies();
     }
 
-    public void GenerateChunk(Chunk chunk)
+    public IEnumerable GenerateChunk(Chunk chunk)
     {
-        wfc.Generate(chunk);
-        chunk.PostGeneration();
+        foreach (var _ in wfc.Generate(chunk))
+        {
+            yield return null;
+        }
+        foreach (var _ in chunk.PostGeneration())
+        {
+            yield return null;
+        }
     }
 }

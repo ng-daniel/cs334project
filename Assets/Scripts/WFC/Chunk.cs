@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace WFC
 {
@@ -41,13 +42,14 @@ namespace WFC
             return slotIndex / CHUNK_SIZE;
         }
 
-        public void PostGeneration()
+        public IEnumerable PostGeneration()
         {
             PruneUnreachablePaths();
 
             foreach (Slot slot in slots)
             {
                 slot.Spawn();
+                yield return null;
             }
         }
 
