@@ -20,20 +20,22 @@ public class BuildingGenerator
     public void GenerateLevels()
     {
         Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
-
+        
         AddFirstLevel();
 
         // Currently spacing building layers out evenly
-        for (float zPos = 10; zPos < Chunk.CHUNK_SIZE; zPos += BuildingSlot.SLOT_HEIGHT)
+        // TODO create a number of layers parameter
+        for (float yHeight = 0; yHeight < 30; yHeight++)
         {
-            AddNextLayer(zPos);
+            AddNextLayer(1);
+            // TODO change level height
         }
     }
 
     private void AddNextLayer(float zPos)
     {
         Level<BuildingSlot> prevLevel = buildingMap[buildingMap.Count - 1];
-        Level<BuildingSlot> newLevel = new Level<BuildingSlot>(chunk, zPos);
+        Level<BuildingSlot> newLevel = new Level<BuildingSlot>(chunk, 1);
 
         for (int i = 0; i < prevLevel.slots.Length; i++)
         {
@@ -61,7 +63,7 @@ public class BuildingGenerator
     private void AddFirstLevel()
     {
 
-        Level<BuildingSlot> level = new Level<BuildingSlot>(chunk, 0.0f);
+        Level<BuildingSlot> level = new Level<BuildingSlot>(chunk, 1);
         List<BuildingModule> modulesList = GenerationManager.instance.buildingModulesList;
 
         if (modulesList == null || modulesList.Count == 0)
@@ -75,14 +77,36 @@ public class BuildingGenerator
         {
             level.slots[i] = new BuildingSlot(chunk, level.GetX(i), level.GetY(i));
 
-            // Assign random module
-            if (Random.value < 0.1)
+            // Assign empty module
+            level.slots[i].buildingModule = modulesList[0]; // empty
+        }
+
+        for (int i = 0; i < GenerationManager.instance.numRectsInFirstLevel; i++)
+        {
+            int x1 = Random.Range(1, Chunk.CHUNK_SIZE);
+            int x2 = Random.Range(1, Chunk.CHUNK_SIZE);
+
+            int y1 = Random.Range(1, Chunk.CHUNK_SIZE);
+            int y2 = Random.Range(1, Chunk.CHUNK_SIZE);
+
+            // Swap coordinates if larger
+            if (x2 < x1)
             {
-                int randInd = Random.Range(0, modulesList.Count);
-                level.slots[i].buildingModule = modulesList[1]; // solid
-            } else
+                int temp = x2; x2 = x1; x1 = temp;
+            }
+            if (y2 < y1)
             {
-                level.slots[i].buildingModule = modulesList[0]; // empty
+                int temp = y2; y2 = y1; y1 = temp;
+            }
+
+            // Fill rect
+            for (int x = x1; x <= x2; x++)
+            {
+                for (int y = y1; y <= y2; y++)
+                {
+                    BuildingSlot slot = level.GetSlot(x, y);
+                    slot.buildingModule = modulesList[1]; // solid
+                }
             }
         }
         
@@ -92,19 +116,39 @@ public class BuildingGenerator
     public void DebugDraw()
     {
         // For each level
+        // Loop through Building Slots and draw
+        float yHeight = 0.0f;
         foreach (Level<BuildingSlot> level in buildingMap)
         {
-            // Loop through Building Slots and draw
+            float heightToAdd = -1.0f;
             for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
             {
                 for (int y = 0; y < Chunk.CHUNK_SIZE; y++)
                 {
                     // Draw the prefab here
                     BuildingSlot slot = level.GetSlot(x, y);
-                    slot?.Spawn();
+                    
+                    slot.Spawn();
+
+                    // If not empty air
+                    if (slot.instantiatedPrefab != null)
+                    {
+                        // TODO make cleaner
+                        Vector3 pos = slot.WorldPos();
+                        pos.y = yHeight;
+                        slot.instantiatedPrefab.transform.position = pos;
+
+                        // Add height
+                        if (heightToAdd < 0.0f)
+                        {
+                            heightToAdd = slot.instantiatedPrefab.transform.localScale.y;
+                        }
+                    }
+
                 }
             }
-
+            // Update height
+            yHeight += heightToAdd;
         }
     }
     

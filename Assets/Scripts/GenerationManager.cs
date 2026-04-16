@@ -33,6 +33,7 @@ public class GenerationManager : MonoBehaviour
 
         Chunk chunk = new Chunk(0, 0);
 
+        // Generate buildings
         chunk.buildingGenerator.GenerateLevels();
         chunk.buildingGenerator.DebugDraw();
 
@@ -57,7 +58,7 @@ public class GenerationManager : MonoBehaviour
 
         Assert.Greater(compatibleModules.Count, 0);
 
-        // Choose random from list
+        // Choose random from list TODO: use weighted probs, get probs from height
         // Assign random module
         int randInd = Random.Range(0, compatibleModules.Count);
         return compatibleModules[randInd];

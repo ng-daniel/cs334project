@@ -6,7 +6,7 @@ public class BuildingSlot : Slot
 {
 
     public BuildingModule buildingModule;
-    private GameObject instantiatedPrefab = null;
+    public GameObject instantiatedPrefab = null;
 
     public BuildingSlot(Chunk chunk, int slotX, int slotY) : base(chunk, slotX, slotY)
     {
@@ -32,10 +32,11 @@ public class BuildingSlot : Slot
         }
 
         Vector3 pos = WorldPos();
+        pos.x *= 2;
+        pos.z *= 2;
 
-        this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab);
-        this.instantiatedPrefab.transform.position = pos;
-        this.instantiatedPrefab.transform.localScale = new Vector3(SLOT_HEIGHT, SLOT_HEIGHT, SLOT_HEIGHT) * 10;
+        this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab, pos, buildingModule.prefab.transform.rotation);
+        this.instantiatedPrefab.transform.localScale *= 2;
     }
 
 

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96af3a4fabdc61241b33547991d5a1ff, type: 3}
   m_Name: TestTop
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModule
-  prefab: {fileID: 5940544648487881456, guid: 2a81fa9ad7a795e428a26a9d697e2ed9, type: 3}
+  prefab: {fileID: 2233853337823839171, guid: 2a81fa9ad7a795e428a26a9d697e2ed9, type: 3}
   modelType: 3
   chanceType: 0

@@ -47,7 +47,8 @@ public class BuildingModule : ScriptableObject
             // Air/floating can stack on floating
             case ModelType.FLOATING:
                 return this.modelType == ModelType.EMPTY ||
-                       this.modelType == ModelType.FLOATING;
+                       this.modelType == ModelType.FLOATING ||
+                       this.modelType == ModelType.SOLID;
             // Empty can stack on tip
             case ModelType.TIP:
                 return this.modelType == ModelType.EMPTY;
