@@ -8,7 +8,7 @@ namespace WFC
 
         public int chunkX;
         public int chunkY;
-        public Level<Slot> level;
+        public Level<Slot> level; // paths
 
         public BuildingGenerator buildingGenerator;
 

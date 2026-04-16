@@ -16,7 +16,7 @@ public class GenerationManager : MonoBehaviour
     [SerializeField]
     public int numRectsInFirstLevel = 2; // Num of rectangles filled in first layer per chunk
 
-    void Awake();
+    void Awake()
     {
         instance = this;
 

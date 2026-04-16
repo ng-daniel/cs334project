@@ -32,8 +32,8 @@ public class BuildingSlot : Slot
         }
 
         Vector3 pos = WorldPos();
-        pos.x *= 2;
-        pos.z *= 2;
+        //pos.x *= 2;
+        //pos.z *= 2;
 
         this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab, pos, buildingModule.prefab.transform.rotation);
         this.instantiatedPrefab.transform.localScale *= 2;

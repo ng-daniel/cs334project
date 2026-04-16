@@ -7,6 +7,7 @@ using WFC;
 [CreateAssetMenu(fileName = "BuildingModule", menuName = "Scriptable Objects/BuildingModule")]
 public class BuildingModule : ScriptableObject
 {
+    public int height = 1; // 1 to 4
     public enum ModelType {
         EMPTY, // Skip this grid cell, but a block/
         SOLID,
