@@ -29,7 +29,7 @@ public class BuildingModule : ScriptableObject
     public ChanceType chanceType = ChanceType.CONSTANT;
 
     /// <summary>
-    /// Whether the input module can stack on top of this one
+    /// Whether this module can stop on the input module below
     /// </summary>
     public bool CanStackOnType(ModelType below)
     {
@@ -46,8 +46,7 @@ public class BuildingModule : ScriptableObject
                        below == ModelType.EMPTY || 
                        below == ModelType.SOLID;
             case ModelType.TIP:
-                // Cannot stack anything
-                return false;
+                return below == ModelType.SOLID;
             default:
                 Debug.LogError("Invalid building module type.");
                 return false;

@@ -38,4 +38,25 @@ public class GenerationManager : MonoBehaviour
         wfc.Generate(chunk);
         chunk.PostGeneration();
     }
+
+    public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule)
+    {
+        if (bottomModule == null) return null;
+        
+        // Get a list of all compatible modules
+        List <BuildingModule> compatibleModules = new List <BuildingModule>();
+
+        foreach (BuildingModule module in buildingModulesList)
+        {
+            if (module.CanStackOnType(bottomModule.modelType))
+            {
+                compatibleModules.Add(module);
+            }
+        }
+
+        // Choose random from list
+        // Assign random module
+        int randInd = Random.Range(0, compatibleModules.Count);
+        return compatibleModules[randInd];
+    }
 }

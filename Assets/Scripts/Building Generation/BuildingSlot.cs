@@ -19,6 +19,11 @@ public class BuildingSlot : Slot
     /// <param name="pos"></param>
     public override void Spawn()
     {
+        if (this.instantiatedPrefab)
+        {
+            return;
+        }
+
         if (!buildingModule ||
             !buildingModule.prefab || 
             buildingModule.modelType == ModelType.EMPTY)
@@ -27,11 +32,6 @@ public class BuildingSlot : Slot
         }
 
         Vector3 pos = WorldPos();
-
-        if (this.instantiatedPrefab)
-        {
-            GameObject.Destroy(this.instantiatedPrefab);
-        }
 
         this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab, pos, Quaternion.identity);
         this.instantiatedPrefab.transform.localScale *= SLOT_SIZE;

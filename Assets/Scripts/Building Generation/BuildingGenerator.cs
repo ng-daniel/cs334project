@@ -19,6 +19,8 @@ public class BuildingGenerator
 
     public void GenerateLevels()
     {
+        Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
+
         AddFirstLevel();
 
         // Currently spacing building layers out evenly
@@ -38,28 +40,16 @@ public class BuildingGenerator
             int xPos = prevLevel.GetX(i);
             int yPos = prevLevel.GetY(i);
 
-            // Get the slot below ("old") and new slot
-            BuildingSlot oldSlot = prevLevel.slots[i];
+            // Get the module eof slot below ("old") and new slot
+            BuildingModule oldModule = prevLevel.slots[i].buildingModule;
 
-            //Assert oldModule is defined and not null
-            Assert.IsNotNull(oldSlot.buildingModule);
+            // Assert oldModule is defined and not null
+            Assert.IsNotNull(oldModule);
 
             BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos);
 
             // Set the building module of the new slot
-            if (oldSlot.buildingModule.modelType == BuildingModule.ModelType.SOLID)
-            {
-                if (Random.value < 0.22)
-                {
-                    newSlot.buildingModule.modelType = BuildingModule.ModelType.EMPTY;
-                }
-                else
-                {
-                    newSlot.buildingModule.modelType = BuildingModule.ModelType.SOLID;
-                }
-            }
-
-            
+            newSlot.buildingModule = GenerationManager.instance.GetRandomBuildingModule(oldModule);            
             newLevel.slots[i] = newSlot;
         }
 
