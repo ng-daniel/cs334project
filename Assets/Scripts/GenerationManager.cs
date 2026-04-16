@@ -8,7 +8,7 @@ public class GenerationManager : MonoBehaviour
     public WFCGenerator wfc;
     public GameObject cube;
 
-    void Start()
+    void Awake()
     {
         instance = this;
         wfc = new WFCGenerator();
@@ -21,8 +21,10 @@ public class GenerationManager : MonoBehaviour
         wfc.AddModule("Cross", 0b1111, 90, 0.05f);
 
         wfc.BuildAdjacencies();
+    }
 
-        Chunk chunk = new Chunk(0, 0);
+    public void GenerateChunk(Chunk chunk)
+    {
         wfc.Generate(chunk);
         chunk.PostGeneration();
     }

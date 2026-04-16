@@ -17,10 +17,10 @@ GameObject:
   - component: {fileID: 3435354712027375873}
   - component: {fileID: 6257144085792371524}
   - component: {fileID: 5651871614016333847}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20c4fc0396e122340b5874cbd8dc15cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.LookBehavior
-  lookSensitivity: 1
+  lookSensitivity: 0.25
 --- !u!114 &6257144085792371524
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace WFC
 {
@@ -20,6 +21,8 @@ namespace WFC
         // that could be in that direction for that module
         // If any direction is 0, the module cannot go in this slot
         public readonly int[][] compatibility;
+
+        List<GameObject> cubes = new List<GameObject>();
 
         public int possibleModuleCount;
         public Module module;
@@ -94,6 +97,7 @@ namespace WFC
             GameObject center = Object.Instantiate(cube);
             center.transform.position = WorldPos();
             center.transform.localScale = new Vector3(SLOT_CENTER, SLOT_HEIGHT, SLOT_CENTER);
+            cubes.Add(center);
 
             for (int d = 0; d < Direction.COUNT; d++)
             {
@@ -113,8 +117,23 @@ namespace WFC
                     {
                         edge.transform.localScale = new Vector3(SLOT_CENTER, SLOT_HEIGHT, SLOT_EDGE);
                     }
+
+                    cubes.Add(edge);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Destroys all GameObjects spawned by this slot. 
+        /// Should be called when a chunk is unloaded so it actually disappears.
+        /// </summary>
+        public void Unload()
+        {
+            for (int i = 0; i < cubes.Count; i++)
+            {
+                Object.Destroy(cubes[i]);
+            }
+            cubes.Clear();
         }
     }
 }
