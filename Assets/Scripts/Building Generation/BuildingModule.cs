@@ -21,13 +21,18 @@ public class BuildingModule : ScriptableObject
     public enum ChanceType
     {
         CONSTANT,
-        POSITIVE_CORRELATION, // Height increases, chance increases
-        NEGATIVE_CORRELATION // Height decreases, chance decrease
+        GAUSSIAN
     }
 
     public GameObject prefab;
     public ModelType modelType = ModelType.SOLID;
+
+    /// <summary>
+    /// Chance type constant: chanceValue is constant
+    /// Chance type Gaussian: chanceValue is the mean height position, std dev 1
+    /// </summary>
     public ChanceType chanceType = ChanceType.CONSTANT;
+    public float chanceValue;
 
     /// <summary>
     /// Whether this module can stop on the input module below

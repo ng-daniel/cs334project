@@ -277,6 +277,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
+      propertyPath: buildingModulesList.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
+      propertyPath: 'buildingModulesList.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 9174837836f806b4cbd791723916218f, type: 2}
+    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
+      propertyPath: 'buildingModulesList.Array.data[5]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 9174837836f806b4cbd791723916218f, type: 2}
     - target: {fileID: 4001056703444116193, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
       propertyPath: m_Name
       value: GenerationManager
