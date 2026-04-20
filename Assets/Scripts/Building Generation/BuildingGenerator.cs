@@ -9,6 +9,7 @@ using WFC;
 public class BuildingGenerator
 {
     private Chunk chunk;
+    private const int NUM_LAYERS = 50;
 
     public List<Level<BuildingSlot>> buildingMap; // A list of levels at various heights
     public BuildingGenerator(Chunk chunk)
@@ -25,7 +26,7 @@ public class BuildingGenerator
 
         // Currently spacing building layers out evenly
         // TODO create a number of layers parameter
-        for (float yHeight = 0; yHeight < 30; yHeight++)
+        for (float yHeight = 0; yHeight < NUM_LAYERS; yHeight++)
         {
             AddNextLayer(1);
             // TODO change level height
@@ -133,16 +134,15 @@ public class BuildingGenerator
                     // If not empty air
                     if (slot.instantiatedPrefab != null)
                     {
-                        // TODO make cleaner
+                        // TODO make cleaner AAHH
                         Vector3 pos = slot.WorldPos();
                         pos.y = yHeight;
                         slot.instantiatedPrefab.transform.position = pos;
 
                         // Add height
-                        if (heightToAdd < 0.0f)
-                        {
-                            heightToAdd = slot.instantiatedPrefab.transform.localScale.y;
-                        }
+                        heightToAdd = Mathf.Max(heightToAdd,
+                            slot.instantiatedPrefab.transform.localScale.y);
+                        
                     }
 
                 }
