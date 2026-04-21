@@ -32,7 +32,8 @@ public class BuildingModule : ScriptableObject
     /// Chance type Gaussian: chanceValue is the mean height position, std dev 1
     /// </summary>
     public ChanceType chanceType = ChanceType.CONSTANT;
-    public float chanceValue;
+
+    public float chanceValue = 0.5f;
 
     /// <summary>
     /// Whether this module can stop on the input module below

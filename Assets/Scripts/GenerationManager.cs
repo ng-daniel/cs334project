@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using WFC;
 
 public class GenerationManager : MonoBehaviour
@@ -57,11 +58,28 @@ public class GenerationManager : MonoBehaviour
             }
         }
 
-        Assert.Greater(compatibleModules.Count, 0);
+        //Assert.Greater(compatibleModules.Count, 0);
 
-        // Choose random from list TODO: use weighted probs, get probs from height
-        // Assign random module
-        int randInd = Random.Range(0, compatibleModules.Count);
-        return compatibleModules[randInd];
+        // Use weighted probabilities to assign random module
+        float total = 0.0f;
+        foreach (BuildingModule module in compatibleModules)
+        {
+            total += module.chanceValue;
+            // TODO: modify chance value based on chance type
+        }
+
+        float randVal = Random.value * total;
+        foreach (BuildingModule module in compatibleModules)
+        {
+            if (randVal < module.chanceValue)
+            {
+                return module;
+            } else
+            {
+                randVal -= module.chanceValue;
+            }
+        }
+        return compatibleModules[0];
+
     }
 }

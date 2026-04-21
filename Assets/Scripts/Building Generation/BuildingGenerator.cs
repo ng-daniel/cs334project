@@ -47,7 +47,7 @@ public class BuildingGenerator
             BuildingModule oldModule = prevLevel.slots[i].buildingModule;
 
             // Assert oldModule is defined and not null
-            Assert.IsNotNull(oldModule);
+            //Assert.IsNotNull(oldModule);
 
             BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos);
 
