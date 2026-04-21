@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 using WFC;
 
 public class GenerationManager : MonoBehaviour
@@ -13,8 +14,12 @@ public class GenerationManager : MonoBehaviour
 
     [SerializeField]
     public List<BuildingModule> buildingModulesList;
+    [SerializeField]
+    public AnimationCurve positiveCorrelationCurve;
+    public AnimationCurve negativeCorrelationCurve;
 
     [SerializeField]
+    // Todo: make number of rectangle random, have min and max
     public int numRectsInFirstLevel = 2; // Num of rectangles filled in first layer per chunk
 
     void Awake()
@@ -43,7 +48,14 @@ public class GenerationManager : MonoBehaviour
         chunk.PostGeneration();
     }
 
-    public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule)
+    /// <summary>
+    /// Get a random building module from the list, according to module chance type and value.
+    /// Pass in the y position (height) of the object.
+    /// </summary>
+    /// <param name="bottomModule"></param>
+    /// <param name="yPosition"></param>
+    /// <returns></returns>
+    public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule, float yPosition)
     {
         if (bottomModule == null) return null;
         
@@ -64,8 +76,21 @@ public class GenerationManager : MonoBehaviour
         float total = 0.0f;
         foreach (BuildingModule module in compatibleModules)
         {
-            total += module.chanceValue;
-            // TODO: modify chance value based on chance type
+            switch (module.chanceType)
+            {
+                case BuildingModule.ChanceType.CONSTANT:
+                    total += module.chanceValue;
+                    break;
+                case BuildingModule.ChanceType.POSITIVE_CORRELATION:
+                    total += module.chanceValue * positiveCorrelationCurve.Evaluate(yPosition/(BuildingGenerator.NUM_LAYERS * 2));
+                    break;
+                case BuildingModule.ChanceType.NEGATIVE_CORRELATION:
+                    total += module.chanceValue * negativeCorrelationCurve.Evaluate(yPosition/(BuildingGenerator.NUM_LAYERS * 2));
+                    break;
+                default:
+                    Debug.LogError("Invalid Chance Type.");
+                    break;
+            }
         }
 
         float randVal = Random.value * total;

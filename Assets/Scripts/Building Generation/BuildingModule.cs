@@ -21,7 +21,8 @@ public class BuildingModule : ScriptableObject
     public enum ChanceType
     {
         CONSTANT,
-        GAUSSIAN
+        POSITIVE_CORRELATION,
+        NEGATIVE_CORRELATION
     }
 
     public GameObject prefab;

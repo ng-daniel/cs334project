@@ -32,7 +32,7 @@ namespace Assets.Scripts.Player
         MovementBehavior movementBehavior;
         JumpBehavior jumpBehavior;
         FPSCameraBehavior fpsCameraBehavior;
-        bool debugMode = false;
+        bool debugMode = true;
 
         void Awake()
         {

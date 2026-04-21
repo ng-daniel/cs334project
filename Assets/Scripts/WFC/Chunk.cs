@@ -16,7 +16,7 @@ namespace WFC
         {
             this.chunkX = chunkX;
             this.chunkY = chunkY;
-            level = new Level<Slot>(this, 1);
+            level = new Level<Slot>(this, 1, 0.0f);
 
             this.buildingGenerator = new BuildingGenerator(this);
 

@@ -4,13 +4,15 @@ using static BuildingModule;
 
 public class BuildingSlot : Slot
 {
+    public readonly Level<BuildingSlot> levelReference;
 
     public BuildingModule buildingModule;
     public GameObject instantiatedPrefab = null;
 
-    public BuildingSlot(Chunk chunk, int slotX, int slotY) : base(chunk, slotX, slotY)
+    public BuildingSlot(Chunk chunk, int slotX, int slotY, Level<BuildingSlot> levelReference) : base(chunk, slotX, slotY)
     {
         buildingModule = null;
+        this.levelReference = levelReference;
     }
 
     /// <summary>
@@ -32,8 +34,7 @@ public class BuildingSlot : Slot
         }
 
         Vector3 pos = WorldPos();
-        //pos.x *= 2;
-        //pos.z *= 2;
+        pos.y = levelReference.levelYPosition;
 
         this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab, pos, buildingModule.prefab.transform.rotation);
         this.instantiatedPrefab.transform.localScale *= 2;

@@ -8,14 +8,19 @@ using WFC;
 
 public class BuildingGenerator
 {
+    public static int NUM_LAYERS = 20;
+
     private Chunk chunk;
-    private const int NUM_LAYERS = 50;
+    private List<BuildingModule> modulesList;
 
     public List<Level<BuildingSlot>> buildingMap; // A list of levels at various heights
+    
+
     public BuildingGenerator(Chunk chunk)
     {
         this.chunk = chunk;
         this.buildingMap = new List<Level<BuildingSlot>>();
+        modulesList = GenerationManager.instance.buildingModulesList;
     }
 
     public void GenerateLevels()
@@ -26,17 +31,17 @@ public class BuildingGenerator
 
         // Currently spacing building layers out evenly
         // TODO create a number of layers parameter
-        for (float yHeight = 0; yHeight < NUM_LAYERS; yHeight++)
+        for (float yGridHeight = 0; yGridHeight < NUM_LAYERS; yGridHeight++)
         {
-            AddNextLayer(1);
-            // TODO change level height
+            float layerY = buildingMap.Count * 2;
+            AddNextLayer(1, layerY);
         }
     }
 
-    private void AddNextLayer(float zPos)
+    private void AddNextLayer(int levelHeight, float yPosition)
     {
         Level<BuildingSlot> prevLevel = buildingMap[buildingMap.Count - 1];
-        Level<BuildingSlot> newLevel = new Level<BuildingSlot>(chunk, 1);
+        Level<BuildingSlot> newLevel = new Level<BuildingSlot>(chunk, levelHeight, yPosition);
 
         for (int i = 0; i < prevLevel.slots.Length; i++)
         {
@@ -49,14 +54,13 @@ public class BuildingGenerator
             // Assert oldModule is defined and not null
             //Assert.IsNotNull(oldModule);
 
-            BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos);
+            BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos, newLevel);
 
             // Set the building module of the new slot
-            newSlot.buildingModule = GenerationManager.instance.GetRandomBuildingModule(oldModule);            
+            newSlot.buildingModule = GenerationManager.instance.GetRandomBuildingModule(oldModule, yPosition);            
             newLevel.slots[i] = newSlot;
-        }
 
-        // TODO: consider adding floating objects with a random chance
+        }
 
         buildingMap.Add(newLevel);
     }
@@ -64,8 +68,7 @@ public class BuildingGenerator
     private void AddFirstLevel()
     {
 
-        Level<BuildingSlot> level = new Level<BuildingSlot>(chunk, 1);
-        List<BuildingModule> modulesList = GenerationManager.instance.buildingModulesList;
+        Level<BuildingSlot> level = new Level<BuildingSlot>(chunk, 1, 0.0f);
 
         if (modulesList == null || modulesList.Count == 0)
         {
@@ -76,7 +79,7 @@ public class BuildingGenerator
         // Temp: randomly fill the building map
         for (int i = 0; i < level.slots.Length; i++)
         {
-            level.slots[i] = new BuildingSlot(chunk, level.GetX(i), level.GetY(i));
+            level.slots[i] = new BuildingSlot(chunk, level.GetX(i), level.GetY(i), level);
 
             // Assign empty module
             level.slots[i].buildingModule = modulesList[0]; // empty
@@ -118,10 +121,9 @@ public class BuildingGenerator
     {
         // For each level
         // Loop through Building Slots and draw
-        float yHeight = 0.0f;
         foreach (Level<BuildingSlot> level in buildingMap)
         {
-            float heightToAdd = -1.0f;
+            //float heightToAdd = -1.0f;
             for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
             {
                 for (int y = 0; y < Chunk.CHUNK_SIZE; y++)
@@ -130,25 +132,8 @@ public class BuildingGenerator
                     BuildingSlot slot = level.GetSlot(x, y);
                     
                     slot.Spawn();
-
-                    // If not empty air
-                    if (slot.instantiatedPrefab != null)
-                    {
-                        // TODO make cleaner AAHH
-                        Vector3 pos = slot.WorldPos();
-                        pos.y = yHeight;
-                        slot.instantiatedPrefab.transform.position = pos;
-
-                        // Add height
-                        heightToAdd = Mathf.Max(heightToAdd,
-                            slot.instantiatedPrefab.transform.localScale.y);
-                        
-                    }
-
                 }
             }
-            // Update height
-            yHeight += heightToAdd;
         }
     }
     

@@ -6,15 +6,16 @@ public class Level<T>
     public readonly Chunk chunk;
 
     public T[] slots;
-    public int levelHeight = 0;      // size (height) of level
+    public int levelGridHeight = 0;      // size (height) of level
+    public float levelYPosition = 0.0f; // y position of level (height above ground)
 
-    public Level(WFC.Chunk chunk, int levelHeight)
+    public Level(WFC.Chunk chunk, int levelGridHeight, float levelYPosition)
     {
         this.chunk = chunk;
         this.slots = new T[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
 
-        this.levelHeight = levelHeight;
-
+        this.levelGridHeight = levelGridHeight;
+        this.levelYPosition = levelYPosition;
     }
     public T GetSlot(int x, int y)
     {

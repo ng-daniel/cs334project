@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96af3a4fabdc61241b33547991d5a1ff, type: 3}
   m_Name: TestFloating
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModule
+  height: 1
   prefab: {fileID: 8758819196851795758, guid: 9aab8e6004dd7924b945b9a6ca18381f, type: 3}
   modelType: 2
-  chanceType: 0
+  chanceType: 1
+  chanceValue: 0.5
