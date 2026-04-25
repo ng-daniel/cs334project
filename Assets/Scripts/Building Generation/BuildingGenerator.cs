@@ -8,8 +8,6 @@ using WFC;
 
 public class BuildingGenerator
 {
-    public static int NUM_LAYERS = 20;
-
     private Chunk chunk;
     private List<BuildingModule> modulesList;
 
@@ -23,22 +21,22 @@ public class BuildingGenerator
         modulesList = GenerationManager.instance.buildingModulesList;
     }
 
-    public void GenerateLevels()
-    {
-        Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
+    //public void GenerateLevels()
+    //{
+    //    Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
         
-        AddFirstLevel();
+    //    AddFirstLevel();
 
-        // Currently spacing building layers out evenly
-        // TODO create a number of layers parameter
-        for (float yGridHeight = 0; yGridHeight < NUM_LAYERS; yGridHeight++)
-        {
-            float layerY = buildingMap.Count * 2;
-            AddNextLayer(1, layerY);
-        }
-    }
+    //    // Currently spacing building layers out evenly TODO: change varying heights
+    //    int numLayers = GenerationManager.instance.numBuildingLayers;
+    //    for (float yGridHeight = 0; yGridHeight < numLayers; yGridHeight++)
+    //    {
+    //        float layerY = buildingMap.Count * 2;
+    //        AddNextLayer(1, layerY);
+    //    }
+    //}
 
-    private void AddNextLayer(int levelHeight, float yPosition)
+    public void AddNextLayer(int levelHeight, float yPosition)
     {
         Level<BuildingSlot> prevLevel = buildingMap[buildingMap.Count - 1];
         Level<BuildingSlot> newLevel = new Level<BuildingSlot>(chunk, levelHeight, yPosition);
@@ -65,7 +63,7 @@ public class BuildingGenerator
         buildingMap.Add(newLevel);
     }
 
-    private void AddFirstLevel()
+    public void AddFirstLevel()
     {
 
         Level<BuildingSlot> level = new Level<BuildingSlot>(chunk, 1, 0.0f);
@@ -85,7 +83,10 @@ public class BuildingGenerator
             level.slots[i].buildingModule = modulesList[0]; // empty
         }
 
-        for (int i = 0; i < GenerationManager.instance.numRectsInFirstLevel; i++)
+        // Random number of "buildings" (rectangles) per chunk
+        int numBuildings = Random.Range(GenerationManager.instance.minBuildingsPerChunk,
+                                        GenerationManager.instance.maxBuildingsPerChunk + 1);
+        for (int i = 0; i < numBuildings; i++)
         {
             int x1 = Random.Range(1, Chunk.CHUNK_SIZE);
             int x2 = Random.Range(1, Chunk.CHUNK_SIZE);
