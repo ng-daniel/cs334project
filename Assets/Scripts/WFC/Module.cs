@@ -1,7 +1,7 @@
 ﻿using UnityEngine.Assertions;
 
 namespace WFC
-{
+{ 
     public class Module
     {
         public int id;

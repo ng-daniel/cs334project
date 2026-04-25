@@ -25,7 +25,7 @@ namespace Assets.Scripts.ChunkLoading
 
         public IEnumerable Unload()
         {
-            foreach (Slot slot in pathChunk.slots)
+            foreach (Slot slot in pathChunk.level.slots)
             {
                 slot.Unload();
                 yield return null;

@@ -120,7 +120,7 @@ namespace WFC
                 yield return null;
             }
 
-            foreach (Slot slot in chunk.slots)
+            foreach (Slot slot in chunk.level.slots)
             {
                 for (int m = 0; m < ModuleCount(); m++)
                 {
@@ -139,9 +139,9 @@ namespace WFC
             int minPossibleCount = int.MaxValue;
 
             // TODO: Use a min heap for this
-            for (int i = 0; i < chunk.slots.Length; i++)
+            for (int i = 0; i < chunk.level.slots.Length; i++)
             {
-                Slot slot = chunk.slots[i];
+                Slot slot = chunk.level.slots[i];
                 int count = slot.possibleModuleCount;
 
                 if (count <= 1)

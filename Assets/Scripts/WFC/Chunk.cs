@@ -9,44 +9,29 @@ namespace WFC
 
         public int chunkX;
         public int chunkY;
-        public Slot[] slots;
+        public Level<Slot> level; // paths
+
+        public BuildingGenerator buildingGenerator;
 
         public Chunk(int chunkX, int chunkY)
         {
             this.chunkX = chunkX;
             this.chunkY = chunkY;
-            slots = new Slot[CHUNK_SIZE * CHUNK_SIZE];
+            level = new Level<Slot>(this, 1);
 
-            for (int i = 0; i < slots.Length; i++)
+            this.buildingGenerator = new BuildingGenerator(this);
+
+            for (int i = 0; i < level.slots.Length; i++)
             {
-                slots[i] = new Slot(this, GetX(i), GetY(i));
+                level.slots[i] = new Slot(this, level.GetX(i), level.GetY(i));
             }
-        }
-
-        public Slot GetSlot(int x, int y)
-        {
-            if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE)
-            {
-                return null;
-            }
-            return slots[y * CHUNK_SIZE + x];
-        }
-
-        public int GetX(int slotIndex)
-        {
-            return slotIndex % CHUNK_SIZE;
-        }
-
-        public int GetY(int slotIndex)
-        {
-            return slotIndex / CHUNK_SIZE;
         }
 
         public IEnumerable PostGeneration()
         {
             PruneUnreachablePaths();
 
-            foreach (Slot slot in slots)
+            foreach (Slot slot in level.slots)
             {
                 slot.Spawn();
                 yield return null;
@@ -56,7 +41,7 @@ namespace WFC
         // Delete all paths that aren't reachable from the edge of a chunk
         private void PruneUnreachablePaths()
         {
-            bool[] reachable = new bool[slots.Length];
+            bool[] reachable = new bool[level.slots.Length];
             Stack<(int, int)> stack = new Stack<(int, int)>();
 
             // Start with all chunk edges
@@ -74,7 +59,7 @@ namespace WFC
                 if (reachable[y * CHUNK_SIZE + x]) continue;
                 reachable[y * CHUNK_SIZE + x] = true;
 
-                Slot slot = slots[y * CHUNK_SIZE + x];
+                Slot slot = level.slots[y * CHUNK_SIZE + x];
 
                 for (int d = 0; d < Direction.COUNT; d++)
                 {
@@ -87,7 +72,7 @@ namespace WFC
                 }
             }
 
-            foreach (Slot slot in slots)
+            foreach (Slot slot in level.slots)
             {
                 if (!reachable[slot.slotY * CHUNK_SIZE + slot.slotX])
                 {
