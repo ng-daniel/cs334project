@@ -409,62 +409,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].time
-      value: -0.5133961
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].time
-      value: 1.048221
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].value
-      value: 4.412798
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].value
-      value: 3.9782243
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].inSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[1].inSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[0].inSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].inSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].outSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[1].outSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[0].outSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].inWeight
-      value: 0.33333334
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].outSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[0].outWeight
-      value: 0.33333334
-      objectReference: {fileID: 0}
     - target: {fileID: 4001056703444116193, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
       propertyPath: m_Name
       value: GenerationManager
@@ -543,9 +487,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f33c17de5cd4843859d11168a0a8ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ChunkLoading.ChunkLoadingManager
-  initialChunkRadius: 2
-  chunkLoadRadius: 1
-  chunkUnloadRadius: 6
+  initialChunkRadius: 5
+  chunkLoadRadius: 2
+  chunkUnloadRadius: 4
 --- !u!4 &1274982618
 Transform:
   m_ObjectHideFlags: 0
@@ -908,10 +852,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3435354712027375873, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
       propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3435354712027375873, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
-      propertyPath: lookSensitivity
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8847373846313990385, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}

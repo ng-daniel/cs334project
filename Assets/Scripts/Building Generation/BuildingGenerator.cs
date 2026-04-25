@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 using WFC;
+using static UnityEngine.Rendering.PostProcessing.HistogramMonitor;
 
 public class BuildingGenerator
 {
@@ -55,7 +56,7 @@ public class BuildingGenerator
             BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos, newLevel);
 
             // Set the building module of the new slot
-            newSlot.buildingModule = GenerationManager.instance.GetRandomBuildingModule(oldModule, yPosition);            
+            newSlot.buildingModule = GetRandomBuildingModule(oldModule, yPosition);            
             newLevel.slots[i] = newSlot;
 
         }
@@ -137,5 +138,76 @@ public class BuildingGenerator
             }
         }
     }
-    
+
+    /// <summary>
+    /// Get a random building module from the list, according to module chance type and value.
+    /// Pass in the y position (height) of the object.
+    /// </summary>
+    /// <param name="bottomModule"></param>
+    /// <param name="yPosition"></param>
+    /// <returns></returns>
+    private BuildingModule GetRandomBuildingModule(BuildingModule bottomModule, float yPosition)
+    {
+        List<BuildingModule> buildingModulesList = GenerationManager.instance.buildingModulesList;
+        if (bottomModule == null) return null;
+
+        // Get a list of all compatible modules
+        List<BuildingModule> compatibleModules = new List<BuildingModule>();
+
+        foreach (BuildingModule module in buildingModulesList)
+        {
+            if (module.CanStackOnType(bottomModule.modelType))
+            {
+                compatibleModules.Add(module);
+            }
+        }
+
+        Assert.Greater(compatibleModules.Count, 0);
+
+        // Use weighted probabilities to assign random module
+        float total = 0.0f;
+        int numBuildingLayers = GenerationManager.instance.numBuildingLayers;
+        foreach (BuildingModule module in compatibleModules)
+        {
+            switch (module.chanceType)
+            {
+                case BuildingModule.ChanceType.CONSTANT:
+                    total += module.chanceValue;
+                    break;
+                case BuildingModule.ChanceType.POSITIVE_CORRELATION:
+                    AnimationCurve positiveCorrelationCurve = GenerationManager.instance.positiveCorrelationCurve;
+                    total += module.chanceValue * positiveCorrelationCurve.Evaluate(yPosition / (numBuildingLayers));
+                    break;
+                case BuildingModule.ChanceType.NEGATIVE_CORRELATION:
+                    AnimationCurve negativeCorrelationCurve = GenerationManager.instance.negativeCorrelationCurve;
+                    total += module.chanceValue * negativeCorrelationCurve.Evaluate(yPosition / (numBuildingLayers));
+                    break;
+                default:
+                    Debug.LogError("Invalid Chance Type.");
+                    break;
+            }
+        }
+
+        // Choose random module from compatible list
+        float randVal = Random.value * total;
+        foreach (BuildingModule module in compatibleModules)
+        {
+            if (randVal < module.chanceValue)
+            {
+                if (module.modelType == BuildingModule.ModelType.SOLID)
+                {
+                    float c = module.chanceValue * GenerationManager.instance.negativeCorrelationCurve.Evaluate(yPosition / (numBuildingLayers * 2));
+                    Debug.Log("Generated " + module.modelType + "at %" + c + "and y pos " + yPosition/(numBuildingLayers*2)); }
+                return module;
+            }
+            else
+            {
+                randVal -= module.chanceValue;
+            }
+        }
+        return compatibleModules[0];
+
+    }
+
+
 }
