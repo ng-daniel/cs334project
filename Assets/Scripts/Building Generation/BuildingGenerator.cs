@@ -1,9 +1,7 @@
-using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
-using Unity.Hierarchy;
-using Unity.VisualScripting;
+using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Pool;
 using WFC;
 
 public class BuildingGenerator
@@ -18,22 +16,25 @@ public class BuildingGenerator
         this.buildingMap = new List<Level<BuildingSlot>>();
     }
 
-    public void GenerateLevels()
+    public IEnumerable GenerateLevels()
     {
         Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
-        
+
         AddFirstLevel();
 
         // Currently spacing building layers out evenly
         // TODO create a number of layers parameter
         for (float yHeight = 0; yHeight < NUM_LAYERS; yHeight++)
         {
-            AddNextLayer(1);
+            foreach (var _ in AddNextLayer(1))
+            {
+                yield return null;
+            }
             // TODO change level height
         }
     }
 
-    private void AddNextLayer(float zPos)
+    private IEnumerable AddNextLayer(float zPos)
     {
         Level<BuildingSlot> prevLevel = buildingMap[buildingMap.Count - 1];
         Level<BuildingSlot> newLevel = new Level<BuildingSlot>(chunk, 1);
@@ -52,8 +53,10 @@ public class BuildingGenerator
             BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos);
 
             // Set the building module of the new slot
-            newSlot.buildingModule = GenerationManager.instance.GetRandomBuildingModule(oldModule);            
+            newSlot.buildingModule = GenerationManager.instance.GetRandomBuildingModule(oldModule);
             newLevel.slots[i] = newSlot;
+
+            yield return null;
         }
 
         // TODO: consider adding floating objects with a random chance
@@ -110,11 +113,11 @@ public class BuildingGenerator
                 }
             }
         }
-        
+
         buildingMap.Add(level);
     }
 
-    public void DebugDraw()
+    public IEnumerable DebugDraw()
     {
         // For each level
         // Loop through Building Slots and draw
@@ -128,7 +131,7 @@ public class BuildingGenerator
                 {
                     // Draw the prefab here
                     BuildingSlot slot = level.GetSlot(x, y);
-                    
+
                     slot.Spawn();
 
                     // If not empty air
@@ -142,14 +145,15 @@ public class BuildingGenerator
                         // Add height
                         heightToAdd = Mathf.Max(heightToAdd,
                             slot.instantiatedPrefab.transform.localScale.y);
-                        
+
                     }
 
+                    yield return null;
                 }
             }
             // Update height
             yHeight += heightToAdd;
         }
     }
-    
+
 }
