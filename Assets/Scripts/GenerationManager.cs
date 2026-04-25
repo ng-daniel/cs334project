@@ -12,15 +12,19 @@ public class GenerationManager : MonoBehaviour
     public WFCGenerator wfc;
     public GameObject cube;
 
+    [Header("Building Generation Settings")]
     [SerializeField]
     public List<BuildingModule> buildingModulesList;
     [SerializeField]
     public AnimationCurve positiveCorrelationCurve;
-    public AnimationCurve negativeCorrelationCurve;
-
     [SerializeField]
-    // Todo: make number of rectangle random, have min and max
-    public int numRectsInFirstLevel = 2; // Num of rectangles filled in first layer per chunk
+    public AnimationCurve negativeCorrelationCurve;
+    [SerializeField]
+    public int minBuildingsPerChunk = 1;
+    [SerializeField]
+    public int maxBuildingsPerChunk = 5;
+    [SerializeField]
+    public int numBuildingLayers = 30; 
 
     void Awake()
     {
@@ -38,14 +42,34 @@ public class GenerationManager : MonoBehaviour
         wfc.BuildAdjacencies();
     }
 
-    public void GenerateChunk(Chunk chunk)
+    //private void Start()
+    //{
+    //    Chunk chunk = new Chunk(0, 0);
+    //        // Generate buildings
+    //    chunk.buildingGenerator.GenerateLevels();
+    //    chunk.buildingGenerator.DebugDraw();
+    //}
+
+    public System.Collections.IEnumerable GenerateChunk(Chunk chunk)
     {
         // Generate buildings
-        chunk.buildingGenerator.GenerateLevels();
-        chunk.buildingGenerator.DebugDraw();
+        chunk.buildingGenerator.AddFirstLevel();
+        for (float yGridHeight = 0; yGridHeight < numBuildingLayers; yGridHeight++)
+        {
+            float layerY = chunk.buildingGenerator.buildingMap.Count * 2;
+            chunk.buildingGenerator.AddNextLayer(1, layerY);
+            yield return null;
+        }
 
-        wfc.Generate(chunk);
-        chunk.PostGeneration();
+        chunk.buildingGenerator.DebugDraw();
+        //foreach (var _ in wfc.Generate(chunk))
+        //{
+        //    yield return null;
+        //}
+        //foreach (var _ in chunk.PostGeneration())
+        //{
+        //    yield return null;
+        //}
     }
 
     /// <summary>
@@ -70,7 +94,7 @@ public class GenerationManager : MonoBehaviour
             }
         }
 
-        //Assert.Greater(compatibleModules.Count, 0);
+        Assert.Greater(compatibleModules.Count, 0);
 
         // Use weighted probabilities to assign random module
         float total = 0.0f;
@@ -82,10 +106,10 @@ public class GenerationManager : MonoBehaviour
                     total += module.chanceValue;
                     break;
                 case BuildingModule.ChanceType.POSITIVE_CORRELATION:
-                    total += module.chanceValue * positiveCorrelationCurve.Evaluate(yPosition/(BuildingGenerator.NUM_LAYERS * 2));
+                    total += module.chanceValue * positiveCorrelationCurve.Evaluate(yPosition/(numBuildingLayers * 2));
                     break;
                 case BuildingModule.ChanceType.NEGATIVE_CORRELATION:
-                    total += module.chanceValue * negativeCorrelationCurve.Evaluate(yPosition/(BuildingGenerator.NUM_LAYERS * 2));
+                    total += module.chanceValue * negativeCorrelationCurve.Evaluate(yPosition/(numBuildingLayers * 2));
                     break;
                 default:
                     Debug.LogError("Invalid Chance Type.");
@@ -93,6 +117,7 @@ public class GenerationManager : MonoBehaviour
             }
         }
 
+        // Choose random module from compatible list
         float randVal = Random.value * total;
         foreach (BuildingModule module in compatibleModules)
         {

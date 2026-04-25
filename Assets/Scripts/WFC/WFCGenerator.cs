@@ -22,6 +22,7 @@
 //
 // Provided image samples and tiles are not part of WaveFunctionCollapse software.
 
+using System.Collections;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
@@ -32,6 +33,7 @@ namespace WFC
         public static WFCGenerator instance;
 
         public List<Module> modules;
+        public System.Random random;
 
         // For each module, for each direction, the list of modules that
         // can be in that direction from that module
@@ -45,6 +47,7 @@ namespace WFC
             instance = this;
 
             modules = new List<Module>();
+            random = new System.Random((int)(Random.value * int.MaxValue));
         }
 
         public void AddModule(string name, int bitmap, int symmetry, float weight)
@@ -95,7 +98,7 @@ namespace WFC
             }
         }
 
-        public bool Generate(Chunk chunk)
+        public IEnumerable Generate(Chunk chunk)
         {
             stack = new Stack<(Slot, int)>();
 
@@ -110,8 +113,11 @@ namespace WFC
                 Collapse(slot);
                 if (!Propagate())
                 {
-                    return false;
+                    // No modules possible for a slot
+                    yield break;
                 }
+
+                yield return null;
             }
 
             foreach (Slot slot in chunk.level.slots)
@@ -125,8 +131,6 @@ namespace WFC
                     }
                 }
             }
-
-            return true;
         }
 
         public Slot NextSlot(Chunk chunk)
@@ -167,7 +171,7 @@ namespace WFC
                 }
             }
 
-            float rand = Random.value * sumWeights;
+            float rand = (float)random.NextDouble() * sumWeights;
             int module = -1;
 
             for (int m = 0; m < slot.wave.Length; m++)

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using WFC;
 
@@ -14,16 +15,20 @@ namespace Assets.Scripts.ChunkLoading
             pathChunk = new Chunk(coords.x, coords.y);
         }
 
-        public void Load()
+        public IEnumerable Load()
         {
-            GenerationManager.instance.GenerateChunk(pathChunk);
+            foreach (var _ in GenerationManager.instance.GenerateChunk(pathChunk))
+            {
+                yield return null;
+            }
         }
 
-        public void Unload()
+        public IEnumerable Unload()
         {
             foreach (Slot slot in pathChunk.level.slots)
             {
                 slot.Unload();
+                yield return null;
             }
         }
     }

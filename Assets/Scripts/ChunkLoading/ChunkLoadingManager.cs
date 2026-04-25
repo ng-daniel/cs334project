@@ -1,8 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
-using WFC;
 using Assets.Scripts.Player;
+using UnityEngine;
+using WFC;
 
 namespace Assets.Scripts.ChunkLoading
 {
@@ -12,6 +12,7 @@ namespace Assets.Scripts.ChunkLoading
         public static ChunkLoadingManager instance;
         Dictionary<Vector2Int, ChunkNode> activeChunks = new Dictionary<Vector2Int, ChunkNode>();
         Vector2Int playerChunkCoords;
+        private bool runningCoroutine;
         [SerializeField] int initialChunkRadius = 2; // Initial chunks within this radius will be loaded on start
         [SerializeField] int chunkLoadRadius = 2; // Empty chunks at this radius or closer will be loaded
         [SerializeField] int chunkUnloadRadius = 3; // Chunks more than this value away from the player will be unloaded
@@ -41,7 +42,7 @@ namespace Assets.Scripts.ChunkLoading
         public void InitializeChunks(Transform startingTransform)
         {
             playerChunkCoords = ChunkLoadingHelper.GetChunkCoords(startingTransform.position);
-            UpdateChunks(playerChunkCoords, playerChunkCoords);
+            SynchronousRunner(UpdateChunks(playerChunkCoords, playerChunkCoords));
         }
 
         public void Update()
@@ -57,12 +58,13 @@ namespace Assets.Scripts.ChunkLoading
             Vector2Int newChunkCoords = ChunkLoadingHelper.GetChunkCoords(newPosition);
             if (newChunkCoords != playerChunkCoords)
             {
-                UpdateChunks(playerChunkCoords, newChunkCoords);
+                Vector2Int oldChunkCoords = playerChunkCoords;
                 playerChunkCoords = newChunkCoords;
+                CoroutineRunner(UpdateChunks(oldChunkCoords, newChunkCoords));
             }
         }
 
-        private void UpdateChunks(Vector2Int oldPlayerChunkCoords, Vector2Int newPlayerChunkCoords)
+        private IEnumerable UpdateChunks(Vector2Int oldPlayerChunkCoords, Vector2Int newPlayerChunkCoords)
         {
             // Implementation for updating chunks based on player movement
             List<Vector2Int> loadMaybe = ChunkLoadingHelper.GetChunkCoordsInRadius(newPlayerChunkCoords, chunkLoadRadius);
@@ -79,7 +81,10 @@ namespace Assets.Scripts.ChunkLoading
                 if (!chunksToKeep.Contains(activeChunkCoords[i]))
                 {
                     n_unloaded++;
-                    UnloadChunk(activeChunkCoords[i]);
+                    foreach (var _ in UnloadChunk(activeChunkCoords[i]))
+                    {
+                        yield return null;
+                    }
                 }
             }
             for (int i = 0; i < loadMaybe.Count; i++)
@@ -87,29 +92,86 @@ namespace Assets.Scripts.ChunkLoading
                 if (!activeChunks.ContainsKey(loadMaybe[i]))
                 {
                     n_loaded++;
-                    LoadChunk(loadMaybe[i]);
+                    foreach (var _ in LoadChunk(loadMaybe[i]))
+                    {
+                        yield return null;
+                    }
                 }
             }
 
             print($"UpdateChunks Result: {n_loaded} chunks loaded, {n_unloaded} chunks unloaded, {activeChunks.Count} total active chunks");
         }
-        private void LoadChunk(Vector2Int chunkCoords)
+
+        private IEnumerable LoadChunk(Vector2Int chunkCoords)
         {
             if (!activeChunks.ContainsKey(chunkCoords))
             {
                 ChunkNode chunkNode = new(chunkCoords);
-                chunkNode.Load();
                 activeChunks.Add(chunkCoords, chunkNode);
+                foreach (var _ in chunkNode.Load())
+                {
+                    yield return null;
+                }
             }
         }
-        private void UnloadChunk(Vector2Int chunkCoords)
+        private IEnumerable UnloadChunk(Vector2Int chunkCoords)
         {
             if (activeChunks.ContainsKey(chunkCoords))
             {
                 ChunkNode chunkNode = activeChunks[chunkCoords];
-                chunkNode.Unload();
                 activeChunks.Remove(chunkCoords);
+                foreach (var _ in chunkNode.Unload())
+                {
+                    yield return null;
+                }
             }
+        }
+
+        public void SynchronousRunner(IEnumerator enumerator)
+        {
+            while (enumerator.MoveNext()) ;
+        }
+
+        public void SynchronousRunner(IEnumerable enumerable)
+        {
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            SynchronousRunner(enumerator);
+        }
+
+        public void CoroutineRunner(IEnumerator enumerator)
+        {
+            IEnumerator Routine()
+            {
+                while (runningCoroutine)
+                {
+                    yield return null;
+                }
+
+                runningCoroutine = true;
+
+                // Frame rate is 60fps, use 40% of a frame at most
+                float timePerFrame = 0.4f / 60f;
+                float yieldTime = Time.realtimeSinceStartup + timePerFrame;
+
+                while (enumerator.MoveNext())
+                {
+                    if (Time.realtimeSinceStartup > yieldTime)
+                    {
+                        yield return null;
+                        yieldTime = Time.realtimeSinceStartup + timePerFrame;
+                    }
+                }
+
+                runningCoroutine = false;
+            }
+
+            StartCoroutine(Routine());
+        }
+
+        public void CoroutineRunner(IEnumerable enumerable)
+        {
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            CoroutineRunner(enumerator);
         }
 
         public void OnDrawGizmos()

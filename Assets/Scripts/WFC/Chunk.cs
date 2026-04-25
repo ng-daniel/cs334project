@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace WFC
 {
@@ -26,13 +27,14 @@ namespace WFC
             }
         }
 
-        public void PostGeneration()
+        public IEnumerable PostGeneration()
         {
             PruneUnreachablePaths();
 
             foreach (Slot slot in level.slots)
             {
                 slot.Spawn();
+                yield return null;
             }
         }
 
