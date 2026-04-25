@@ -36,25 +36,11 @@ public class GenerationManager : MonoBehaviour
     public IEnumerable GenerateChunk(Chunk chunk)
     {
         // Generate buildings
+        yield return chunk.buildingGenerator.GenerateLevels();
+        yield return chunk.buildingGenerator.DebugDraw();
 
-        foreach (var _ in chunk.buildingGenerator.GenerateLevels())
-        {
-            yield return null;
-        }
-
-        foreach (var _ in chunk.buildingGenerator.DebugDraw())
-        {
-            yield return null;
-        }
-
-        foreach (var _ in wfc.Generate(chunk))
-        {
-            yield return null;
-        }
-        foreach (var _ in chunk.PostGeneration())
-        {
-            yield return null;
-        }
+        yield return wfc.Generate(chunk);
+        yield return chunk.PostGeneration();
     }
 
     public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule)

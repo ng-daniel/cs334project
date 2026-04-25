@@ -42,7 +42,7 @@ namespace Assets.Scripts.ChunkLoading
         public void InitializeChunks(Transform startingTransform)
         {
             playerChunkCoords = ChunkLoadingHelper.GetChunkCoords(startingTransform.position);
-            SynchronousRunner(UpdateChunks(playerChunkCoords, playerChunkCoords));
+            AsyncRunner.RunSync(UpdateChunks(playerChunkCoords, playerChunkCoords));
         }
 
         public void Update()
@@ -60,7 +60,7 @@ namespace Assets.Scripts.ChunkLoading
             {
                 Vector2Int oldChunkCoords = playerChunkCoords;
                 playerChunkCoords = newChunkCoords;
-                CoroutineRunner(UpdateChunks(oldChunkCoords, newChunkCoords));
+                AsyncRunner.RunAsync(UpdateChunks(oldChunkCoords, newChunkCoords));
             }
         }
 
@@ -81,10 +81,7 @@ namespace Assets.Scripts.ChunkLoading
                 if (!chunksToKeep.Contains(activeChunkCoords[i]))
                 {
                     n_unloaded++;
-                    foreach (var _ in UnloadChunk(activeChunkCoords[i]))
-                    {
-                        yield return null;
-                    }
+                    yield return UnloadChunk(activeChunkCoords[i]);
                 }
             }
             for (int i = 0; i < loadMaybe.Count; i++)
@@ -92,10 +89,7 @@ namespace Assets.Scripts.ChunkLoading
                 if (!activeChunks.ContainsKey(loadMaybe[i]))
                 {
                     n_loaded++;
-                    foreach (var _ in LoadChunk(loadMaybe[i]))
-                    {
-                        yield return null;
-                    }
+                    yield return LoadChunk(loadMaybe[i]);
                 }
             }
 
@@ -108,10 +102,7 @@ namespace Assets.Scripts.ChunkLoading
             {
                 ChunkNode chunkNode = new(chunkCoords);
                 activeChunks.Add(chunkCoords, chunkNode);
-                foreach (var _ in chunkNode.Load())
-                {
-                    yield return null;
-                }
+                yield return chunkNode.Load();
             }
         }
         private IEnumerable UnloadChunk(Vector2Int chunkCoords)
@@ -120,58 +111,8 @@ namespace Assets.Scripts.ChunkLoading
             {
                 ChunkNode chunkNode = activeChunks[chunkCoords];
                 activeChunks.Remove(chunkCoords);
-                foreach (var _ in chunkNode.Unload())
-                {
-                    yield return null;
-                }
+                yield return chunkNode.Unload();
             }
-        }
-
-        public void SynchronousRunner(IEnumerator enumerator)
-        {
-            while (enumerator.MoveNext()) ;
-        }
-
-        public void SynchronousRunner(IEnumerable enumerable)
-        {
-            IEnumerator enumerator = enumerable.GetEnumerator();
-            SynchronousRunner(enumerator);
-        }
-
-        public void CoroutineRunner(IEnumerator enumerator)
-        {
-            IEnumerator Routine()
-            {
-                while (runningCoroutine)
-                {
-                    yield return null;
-                }
-
-                runningCoroutine = true;
-
-                // Frame rate is 60fps, use 40% of a frame at most
-                float timePerFrame = 0.4f / 60f;
-                float yieldTime = Time.realtimeSinceStartup + timePerFrame;
-
-                while (enumerator.MoveNext())
-                {
-                    if (Time.realtimeSinceStartup > yieldTime)
-                    {
-                        yield return null;
-                        yieldTime = Time.realtimeSinceStartup + timePerFrame;
-                    }
-                }
-
-                runningCoroutine = false;
-            }
-
-            StartCoroutine(Routine());
-        }
-
-        public void CoroutineRunner(IEnumerable enumerable)
-        {
-            IEnumerator enumerator = enumerable.GetEnumerator();
-            CoroutineRunner(enumerator);
         }
 
         public void OnDrawGizmos()

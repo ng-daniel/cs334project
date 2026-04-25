@@ -17,10 +17,7 @@ namespace Assets.Scripts.ChunkLoading
 
         public IEnumerable Load()
         {
-            foreach (var _ in GenerationManager.instance.GenerateChunk(pathChunk))
-            {
-                yield return null;
-            }
+            return GenerationManager.instance.GenerateChunk(pathChunk);
         }
 
         public IEnumerable Unload()
