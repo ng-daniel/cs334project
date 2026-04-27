@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Player;
+using Unity.Profiling;
 using Unity.VisualScripting;
 using UnityEngine;
 using WFC;
@@ -25,7 +26,8 @@ namespace Assets.Scripts.ChunkLoading
         [SerializeField] int maxLayerHeight;
         [SerializeField] List<int> buildingPieceHeights;
 
-        public List<Tuple<int, List<int>>> layerData { get; private set; }
+        public List<Tuple<int, List<int>>> LayerData { get; private set; }
+        [SerializeField] public List<int> LayerHeights;
 
         GameObject player;
 
@@ -33,13 +35,7 @@ namespace Assets.Scripts.ChunkLoading
         {
             instance = this;
 
-            layerData = ChunkLoadingHelper.ComputeLayerHeights(
-                numLayers,
-                maxTotalHeight,
-                minLayerHeight,
-                maxLayerHeight,
-                buildingPieceHeights
-            );
+            InitializeLayerHeightData();
 
             try
             {
@@ -52,6 +48,27 @@ namespace Assets.Scripts.ChunkLoading
                 InitializeChunks(this.transform);
             }
 
+        }
+
+        /// <summary>
+        /// Initializes the layer height data for chunk generation. 
+        /// This method computes the heights of each layer for a chunk, 
+        /// starting from the ground and working upwards.
+        /// </summary>
+        public void InitializeLayerHeightData()
+        {
+            LayerData = ChunkLoadingHelper.ComputeLayerHeights(
+                numLayers,
+                maxTotalHeight,
+                minLayerHeight,
+                maxLayerHeight,
+                buildingPieceHeights
+            );
+            LayerHeights = new List<int>();
+            foreach (var layer in LayerData)
+            {
+                LayerHeights.Add(layer.Item1);
+            }
         }
 
         /// <summary>

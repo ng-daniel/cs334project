@@ -16,11 +16,16 @@ namespace Assets.Scripts.ChunkLoading
         public ChunkNode(Vector2Int coords)
         {
             this.coords = coords;
-            basePathChunk = new Chunk(coords.x, coords.y);
-
-            for (int i = 0; i < ChunkLoadingManager.instance.layerData.Count; i++)
+                
+            for (int i = 0; i < ChunkLoadingManager.instance.LayerHeights.Count; i++)
             {
-                chunkLayers.Add(new Chunk(coords.x, coords.y));
+                int height = ChunkLoadingManager.instance.LayerHeights[i];
+                chunkLayers.Add(new Chunk(coords.x, coords.y, height));
+                
+                if (i == 0)
+                {
+                    basePathChunk = chunkLayers[0];
+                }
             }
 
             this.buildingGenerator = new BuildingGenerator(basePathChunk);
@@ -28,22 +33,23 @@ namespace Assets.Scripts.ChunkLoading
 
         public IEnumerable Load()
         {
-            foreach (Tuple<int, List<int>> layer in ChunkLoadingManager.instance.layerData)
+            foreach (Chunk chunk in chunkLayers)
             {
-                int layerHeight = layer.Item1;
+                yield return GenerationManager.instance.GenerateChunk(chunk);   
             }
-            yield return GenerationManager.instance.GenerateChunk(this);
-
             yield return buildingGenerator.GenerateLevels();
             yield return buildingGenerator.DebugDraw();
         }
 
         public IEnumerable Unload()
         {
-            foreach (Slot slot in basePathChunk.level.slots)
+            foreach (Chunk chunk in chunkLayers)
             {
-                slot.Unload();
-                yield return null;
+                foreach (Slot slot in chunk.level.slots)
+                {
+                    slot.Unload();
+                    yield return null;
+                }
             }
         }
 

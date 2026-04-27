@@ -34,10 +34,10 @@ public class GenerationManager : MonoBehaviour
         wfc.BuildAdjacencies();
     }
 
-    public IEnumerable GenerateChunk(ChunkNode chunkNode)
+    public IEnumerable GenerateChunk(Chunk chunk)
     {
-        yield return wfc.Generate(chunkNode.GetPathChunk());
-        yield return chunkNode.GetPathChunk().PostGeneration();
+        yield return wfc.Generate(chunk);
+        yield return chunk.PostGeneration();
     }
 
     public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule)

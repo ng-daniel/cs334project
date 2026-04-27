@@ -71,7 +71,7 @@ namespace WFC
         {
             int x = chunk.chunkX * Chunk.CHUNK_SIZE + slotX;
             int y = chunk.chunkY * Chunk.CHUNK_SIZE + slotY;
-            return new Vector3(x * SLOT_SIZE, 0, y * SLOT_SIZE);
+            return new Vector3(x * SLOT_SIZE, chunk.level.levelHeight, y * SLOT_SIZE);
         }
 
         public virtual void Spawn()

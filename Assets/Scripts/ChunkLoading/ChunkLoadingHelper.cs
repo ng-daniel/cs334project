@@ -77,7 +77,9 @@ namespace Assets.Scripts.ChunkLoading
                     i--;
                     continue;
                 }
-                layerHeights.Add(Tuple.Create(layerHeight, buildingPieces));
+
+                int cumulativeLayerHeight = maxTotalHeight - remainingHeight + layerHeight;
+                layerHeights.Add(Tuple.Create(cumulativeLayerHeight, buildingPieces));
                 remainingHeight -= layerHeight;
             }
 
