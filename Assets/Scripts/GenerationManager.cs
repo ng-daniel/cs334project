@@ -38,10 +38,6 @@ public class GenerationManager : MonoBehaviour
     {
         yield return wfc.Generate(chunkNode.GetPathChunk());
         yield return chunkNode.GetPathChunk().PostGeneration();
-
-        // Generate buildings
-        yield return chunkNode.GetBuildingGenerator().GenerateLevels();
-        yield return chunkNode.GetBuildingGenerator().DebugDraw();
     }
 
     public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule)
