@@ -1,7 +1,9 @@
+using JetBrains.Annotations;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.Hierarchy;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 using WFC;
@@ -44,6 +46,12 @@ public class BuildingGenerator
 
         for (int i = 0; i < prevLevel.slots.Length; i++)
         {
+            // If we already specified the slot here, skip
+            if (newLevel.slots[i] != null)
+            {
+                continue;
+            }
+
             int xPos = prevLevel.GetX(i);
             int yPos = prevLevel.GetY(i);
 
@@ -55,9 +63,19 @@ public class BuildingGenerator
 
             BuildingSlot newSlot = new BuildingSlot(chunk, xPos, yPos, newLevel);
 
-            // Set the building module of the new slot
-            newSlot.buildingModule = GetRandomBuildingModule(oldModule, yPosition);            
+            newSlot.buildingModule = GetRandomBuildingModule(oldModule, yPosition);
             newLevel.slots[i] = newSlot;
+
+            // Set the building module of the new slot
+            //int newInd = yPos * WFC.Chunk.CHUNK_SIZE + xPos + 1;
+            //if (newInd < newLevel.slots.Length && newLevel.slots[newInd] == null) {
+
+            //    if (newSlot.buildingModule.modelType == BuildingModule.ModelType.SOLID)
+            //    {
+            //        BuildingSlot extraSlot = new BuildingSlot(chunk, xPos + 1, yPos, newLevel);
+            //        newLevel.slots[newInd] = extraSlot;
+            //    }
+            //}
 
         }
 
@@ -197,8 +215,10 @@ public class BuildingGenerator
                 if (module.modelType == BuildingModule.ModelType.SOLID)
                 {
                     float c = module.chanceValue * GenerationManager.instance.negativeCorrelationCurve.Evaluate(yPosition / (numBuildingLayers * 2));
-                    Debug.Log("Generated " + module.modelType + "at %" + c + "and y pos " + yPosition/(numBuildingLayers*2)); }
+                    //Debug.Log("Generated " + module.modelType + "at %" + c + "and y pos " + yPosition/(numBuildingLayers*2)); }
+                }
                 return module;
+
             }
             else
             {
@@ -206,6 +226,104 @@ public class BuildingGenerator
             }
         }
         return compatibleModules[0];
+
+    }
+
+    /// <summary>
+    /// After generating the map, hollow out the blocks that are not seen by setting
+    /// the interior flag on each building slot
+    /// </summary>
+    public void BuildHollowMap()
+    {
+        // For each level in building map
+
+        foreach (Level<BuildingSlot> level in buildingMap)
+        {
+            bool[,] visitedSlot = new bool[Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE];
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+
+            // Go through each outer edge that is air, and add to queue
+
+            for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
+            {
+                BuildingSlot slot1 = level.GetSlot(x, 0);
+                BuildingSlot slot2 = level.GetSlot(x, Chunk.CHUNK_SIZE - 1);
+
+                if (slot1.IsEmpty())
+                {
+                    queue.Enqueue(new Vector2Int(x, 0));
+                    visitedSlot[x, 0] = true;
+                }
+
+                if (slot2.IsEmpty())
+                {
+                    queue.Enqueue(new Vector2Int(x, slot2.slotY));
+                    visitedSlot[x, slot2.slotY] = true;
+                }
+            }
+
+            for (int y = 1; y < Chunk.CHUNK_SIZE - 1; y++)
+            {
+                BuildingSlot slot1 = level.GetSlot(0, y);
+                BuildingSlot slot2 = level.GetSlot(Chunk.CHUNK_SIZE - 1, y);
+
+                if (slot1.IsEmpty())
+                {
+                    queue.Enqueue(new Vector2Int(0, y));
+                    visitedSlot[0, y] = true;
+                    slot1.isExteriorAir = true;
+                }
+
+                if (slot2.IsEmpty())
+                {
+                    queue.Enqueue(new Vector2Int(slot2.slotX, y));
+                    visitedSlot[slot2.slotX, y] = true;
+                    slot2.isExteriorAir = true;
+                }
+            }
+
+            // Go through the queue and mark exterior air
+
+            while (queue.Count > 0)
+            {
+                Vector2Int slotPos = queue.Dequeue();
+
+                // Check all four directions 
+
+                BuildingSlot[] toCheck = new BuildingSlot[] {
+                    level.GetSlot(slotPos.x + 1, slotPos.y),
+                    level.GetSlot(slotPos.x - 1, slotPos.y),
+                    level.GetSlot(slotPos.x, slotPos.y - 1),
+                    level.GetSlot(slotPos.x, slotPos.y + 1)
+                };
+
+                for (int i = 0; i < toCheck.Length; i++)
+                {
+                    BuildingSlot slot = toCheck[i];
+                    if (slot == null ||
+                        visitedSlot[slot.slotX, slot.slotY])
+                    {
+                        continue;
+                    }
+
+                    if (slot.IsEmpty())
+                    {
+                        visitedSlot[slot.slotY, slot.slotY] = true;
+                        queue.Enqueue(new Vector2Int(slot.slotX, slot.slotY));
+                        slot.isExteriorAir = true;
+                    }
+                }
+            }
+
+
+        } // end for
+
+        // If a block is not empty and touches exterior air, then mark as visible
+        //for (int i = 0; i < buildingMap.slots.Length; i++)
+        //{
+
+        //}
+        // TODO
 
     }
 

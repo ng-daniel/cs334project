@@ -52,16 +52,18 @@ public class GenerationManager : MonoBehaviour
             chunk.buildingGenerator.AddNextLayer(1, layerY);
             yield return null;
         }
+        chunk.buildingGenerator.BuildHollowMap();
 
         chunk.buildingGenerator.DebugDraw();
-        //foreach (var _ in wfc.Generate(chunk))
-        //{
-        //    yield return null;
-        //}
-        //foreach (var _ in chunk.PostGeneration())
-        //{
-        //    yield return null;
-        //}
+
+        foreach (var _ in wfc.Generate(chunk))
+        {
+            yield return null;
+        }
+        foreach (var _ in chunk.PostGeneration())
+        {
+            yield return null;
+        }
     }
 
     
