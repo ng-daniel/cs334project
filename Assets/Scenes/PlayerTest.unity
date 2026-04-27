@@ -180,7 +180,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 60
+  field of view: 105
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -358,6 +358,12 @@ MonoBehaviour:
   initialChunkRadius: 3
   chunkLoadRadius: 2
   chunkUnloadRadius: 4
+  numLayers: 3
+  maxTotalHeight: 100
+  minLayerHeight: 5
+  maxLayerHeight: 20
+  buildingPieceHeights: 010000000200000003000000
+  LayerHeights: 
 --- !u!4 &1274982618
 Transform:
   m_ObjectHideFlags: 0
