@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.ChunkLoading;
 using NUnit.Framework;
 using UnityEngine;
 using WFC;
@@ -33,14 +34,14 @@ public class GenerationManager : MonoBehaviour
         wfc.BuildAdjacencies();
     }
 
-    public IEnumerable GenerateChunk(Chunk chunk)
+    public IEnumerable GenerateChunk(ChunkNode chunkNode)
     {
-        // Generate buildings
-        yield return chunk.buildingGenerator.GenerateLevels();
-        yield return chunk.buildingGenerator.DebugDraw();
+        yield return wfc.Generate(chunkNode.GetPathChunk());
+        yield return chunkNode.GetPathChunk().PostGeneration();
 
-        yield return wfc.Generate(chunk);
-        yield return chunk.PostGeneration();
+        // Generate buildings
+        yield return chunkNode.GetBuildingGenerator().GenerateLevels();
+        yield return chunkNode.GetBuildingGenerator().DebugDraw();
     }
 
     public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule)

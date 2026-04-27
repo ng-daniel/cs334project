@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Player;
+using Unity.VisualScripting;
 using UnityEngine;
 using WFC;
 
@@ -17,11 +19,27 @@ namespace Assets.Scripts.ChunkLoading
         [SerializeField] int chunkLoadRadius = 2; // Empty chunks at this radius or closer will be loaded
         [SerializeField] int chunkUnloadRadius = 3; // Chunks more than this value away from the player will be unloaded
 
+        [SerializeField] int numLayers;
+        [SerializeField] int maxTotalHeight;
+        [SerializeField] int minLayerHeight;
+        [SerializeField] int maxLayerHeight;
+        [SerializeField] List<int> buildingPieceHeights;
+
+        public List<Tuple<int, List<int>>> layerData { get; private set; }
+
         GameObject player;
 
         public void Start()
         {
             instance = this;
+
+            layerData = ChunkLoadingHelper.ComputeLayerHeights(
+                numLayers,
+                maxTotalHeight,
+                minLayerHeight,
+                maxLayerHeight,
+                buildingPieceHeights
+            );
 
             try
             {
@@ -33,6 +51,7 @@ namespace Assets.Scripts.ChunkLoading
                 Debug.LogError("PlayerController / Player Prefab not found in scene.");
                 InitializeChunks(this.transform);
             }
+
         }
 
         /// <summary>

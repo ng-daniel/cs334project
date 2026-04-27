@@ -13,6 +13,11 @@ public class BuildingSlot : Slot
         buildingModule = null;
     }
 
+    public GameObject GetInstantiatedPrefab()
+    {
+        return instantiatedPrefab;
+    }
+
     /// <summary>
     /// Draw the object at this position
     /// </summary>

@@ -1,23 +1,31 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using WFC;
 
 namespace Assets.Scripts.ChunkLoading
 {
-    [System.Serializable]
+    [Serializable]
     public class ChunkNode
     {
         [SerializeField] Vector2Int coords;
         [SerializeField] Chunk pathChunk;
+        [SerializeField] BuildingGenerator buildingGenerator;
         public ChunkNode(Vector2Int coords)
         {
             this.coords = coords;
             pathChunk = new Chunk(coords.x, coords.y);
+            this.buildingGenerator = new BuildingGenerator(pathChunk);
         }
 
         public IEnumerable Load()
         {
-            return GenerationManager.instance.GenerateChunk(pathChunk);
+            foreach (Tuple<int, List<int>> layer in ChunkLoadingManager.instance.layerData)
+            {
+                int layerHeight = layer.Item1;
+            }
+            return GenerationManager.instance.GenerateChunk(this);
         }
 
         public IEnumerable Unload()
@@ -27,6 +35,16 @@ namespace Assets.Scripts.ChunkLoading
                 slot.Unload();
                 yield return null;
             }
+        }
+
+        public Chunk GetPathChunk()
+        {
+            return pathChunk;
+        }
+
+        public BuildingGenerator GetBuildingGenerator()
+        {
+            return buildingGenerator;
         }
     }
 }
