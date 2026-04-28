@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using Unity.Hierarchy;
 using Unity.VisualScripting;
 using UnityEditor;
+using System.Collections;
+using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Pool;
 using WFC;
 
 public class BuildingGenerator
@@ -23,20 +25,20 @@ public class BuildingGenerator
         modulesList = GenerationManager.instance.buildingModulesList;
     }
 
-    //public void GenerateLevels()
-    //{
-    //    Assert.Greater(GenerationManager.instance.buildingModulesList.Count, 0);
-        
-    //    AddFirstLevel();
-
-    //    // Currently spacing building layers out evenly TODO: change varying heights
-    //    int numLayers = GenerationManager.instance.numBuildingLayers;
-    //    for (float yGridHeight = 0; yGridHeight < numLayers; yGridHeight++)
-    //    {
-    //        float layerY = buildingMap.Count * 2;
-    //        AddNextLayer(1, layerY);
-    //    }
-    //}
+    public IEnumerable GenerateLevels()
+    {
+        // Generate buildings
+        AddFirstLevel();
+        int numLayers = GenerationManager.instance.numBuildingLayers;
+        for (float yGridHeight = 0; yGridHeight < numLayers; yGridHeight++)
+        {
+            float layerY = buildingMap.Count * 2;
+            AddNextLayer(1, layerY);
+            yield return null;
+        }
+        BuildHollowMap();
+        yield return null;
+    }
 
     public void AddNextLayer(int levelHeight, float yPosition)
     {
@@ -132,11 +134,11 @@ public class BuildingGenerator
                 }
             }
         }
-        
+
         buildingMap.Add(level);
     }
 
-    public void DebugDraw()
+    public IEnumerable DebugDraw()
     {
         // For each level
         // Loop through Building Slots and draw
@@ -149,11 +151,12 @@ public class BuildingGenerator
                 {
                     // Draw the prefab here
                     BuildingSlot slot = level.GetSlot(x, y);
-                    
+
                     slot.Spawn();
                 }
             }
         }
+        yield return null;
     }
 
     /// <summary>

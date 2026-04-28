@@ -1,35 +1,66 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using WFC;
 
 namespace Assets.Scripts.ChunkLoading
 {
-    [System.Serializable]
+    [Serializable]
     public class ChunkNode
     {
         [SerializeField] Vector2Int coords;
-        [SerializeField] Chunk pathChunk;
+        [SerializeField] Chunk basePathChunk;
+        [SerializeField] List<Chunk> chunkLayers = new List<Chunk>();
+        [SerializeField] BuildingGenerator buildingGenerator;
         public ChunkNode(Vector2Int coords)
         {
             this.coords = coords;
-            pathChunk = new Chunk(coords.x, coords.y);
+                
+            for (int i = 0; i < ChunkLoadingManager.instance.LayerHeights.Count; i++)
+            {
+                int height = ChunkLoadingManager.instance.LayerHeights[i];
+                chunkLayers.Add(new Chunk(coords.x, coords.y, height));
+                
+                if (i == 0)
+                {
+                    basePathChunk = chunkLayers[0];
+                }
+            }
+
+            this.buildingGenerator = new BuildingGenerator(basePathChunk);
         }
 
         public IEnumerable Load()
         {
-            foreach (var _ in GenerationManager.instance.GenerateChunk(pathChunk))
+            foreach (Chunk chunk in chunkLayers)
             {
-                yield return null;
+                yield return GenerationManager.instance.GenerateChunk(chunk);   
             }
+            yield return buildingGenerator.GenerateLevels();
+            yield return buildingGenerator.DebugDraw();
         }
 
         public IEnumerable Unload()
         {
-            foreach (Slot slot in pathChunk.level.slots)
+            foreach (Chunk chunk in chunkLayers)
             {
-                slot.Unload();
-                yield return null;
+                foreach (Slot slot in chunk.level.slots)
+                {
+                    slot.Unload();
+                    yield return null;
+                }
             }
+        }
+
+        public Chunk GetPathChunk()
+        {
+            return basePathChunk;
+        }
+
+        public BuildingGenerator GetBuildingGenerator()
+        {
+            return buildingGenerator;
         }
     }
 }

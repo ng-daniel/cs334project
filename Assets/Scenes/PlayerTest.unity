@@ -119,77 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &214468042
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 214468045}
-  - component: {fileID: 214468044}
-  - component: {fileID: 214468043}
-  m_Layer: 7
-  m_Name: Post-process Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &214468043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214468042}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Postprocessing.Runtime::UnityEngine.Rendering.PostProcessing.PostProcessVolume
-  sharedProfile: {fileID: 11400000, guid: 0d42091da01597142b81cccff460d8dc, type: 2}
-  isGlobal: 1
-  blendDistance: 0
-  weight: 1
-  priority: 0
---- !u!65 &214468044
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214468042}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &214468045
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214468042}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1183255380
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +132,6 @@ GameObject:
   - component: {fileID: 1183255381}
   - component: {fileID: 1183255384}
   - component: {fileID: 1183255385}
-  - component: {fileID: 1183255386}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -218,7 +146,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1183255380}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &1183255382
 Camera:
   m_ObjectHideFlags: 0
@@ -228,7 +156,7 @@ Camera:
   m_GameObject: {fileID: 1183255380}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.08677466, g: 0.1961107, b: 0.3679245, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -252,7 +180,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 60
+  field of view: 105
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -341,66 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b37621986f6d245af107a785362169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Player.FPSCameraBehavior
---- !u!114 &1183255386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1183255380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Postprocessing.Runtime::UnityEngine.Rendering.PostProcessing.PostProcessLayer
-  volumeTrigger: {fileID: 1183255383}
-  volumeLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  stopNaNPropagation: 1
-  finalBlitToCameraTarget: 0
-  antialiasingMode: 0
-  temporalAntialiasing:
-    jitterSpread: 0.75
-    sharpness: 0.25
-    stationaryBlending: 0.95
-    motionBlending: 0.85
-  subpixelMorphologicalAntialiasing:
-    quality: 2
-  fastApproximateAntialiasing:
-    fastMode: 0
-    keepAlpha: 0
-  fog:
-    enabled: 1
-    excludeSkybox: 1
-  debugLayer:
-    lightMeter:
-      width: 512
-      height: 256
-      showCurves: 1
-    histogram:
-      width: 512
-      height: 256
-      channel: 3
-    waveform:
-      exposure: 0.12
-      height: 256
-    vectorscope:
-      size: 256
-      exposure: 0.12
-    overlaySettings:
-      linearDepth: 0
-      motionColorIntensity: 4
-      motionGridSize: 64
-      colorBlindnessType: 0
-      colorBlindnessStrength: 1
-  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
-  breakBeforeColorGrading: 0
-  m_BeforeTransparentBundles: []
-  m_BeforeStackBundles: []
-  m_AfterStackBundles: []
 --- !u!1001 &1241924445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -409,62 +277,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].time
-      value: -0.5133961
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].time
-      value: 1.048221
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].value
-      value: 4.412798
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].value
-      value: 3.9782243
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].inSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[1].inSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[0].inSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].inSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[0].outSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: negativeCorrelationCurve.m_Curve.Array.data[1].outSlope
-      value: -2.8784976
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[0].outSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].inWeight
-      value: 0.33333334
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[1].outSlope
-      value: 3.7952151
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889014076647556471, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
-      propertyPath: positiveCorrelationCurve.m_Curve.Array.data[0].outWeight
-      value: 0.33333334
-      objectReference: {fileID: 0}
     - target: {fileID: 4001056703444116193, guid: 10a6b32561a27684781c9df8d4c6ef8c, type: 3}
       propertyPath: m_Name
       value: GenerationManager
@@ -543,9 +355,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f33c17de5cd4843859d11168a0a8ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ChunkLoading.ChunkLoadingManager
-  initialChunkRadius: 2
-  chunkLoadRadius: 1
-  chunkUnloadRadius: 6
+  initialChunkRadius: 3
+  chunkLoadRadius: 2
+  chunkUnloadRadius: 4
+  numLayers: 3
+  maxTotalHeight: 100
+  minLayerHeight: 5
+  maxLayerHeight: 20
+  buildingPieceHeights: 010000000200000003000000
+  LayerHeights: 
 --- !u!4 &1274982618
 Transform:
   m_ObjectHideFlags: 0
@@ -906,14 +724,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3435354712027375873, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3435354712027375873, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
-      propertyPath: lookSensitivity
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8847373846313990385, guid: 63d152ebe28337049a9ca99ff1cdfcc4, type: 3}
       propertyPath: m_Name
       value: Player
@@ -934,4 +744,3 @@ SceneRoots:
   - {fileID: 1892086551}
   - {fileID: 1454834335}
   - {fileID: 1274982618}
-  - {fileID: 214468045}

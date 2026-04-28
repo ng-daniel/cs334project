@@ -1,5 +1,8 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using System.Collections;
+using Assets.Scripts.ChunkLoading;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -44,18 +47,6 @@ public class GenerationManager : MonoBehaviour
 
     public System.Collections.IEnumerable GenerateChunk(Chunk chunk)
     {
-        // Generate buildings
-        chunk.buildingGenerator.AddFirstLevel();
-        for (float yGridHeight = 0; yGridHeight < numBuildingLayers; yGridHeight++)
-        {
-            float layerY = chunk.buildingGenerator.buildingMap.Count * 2;
-            chunk.buildingGenerator.AddNextLayer(1, layerY);
-            yield return null;
-        }
-        chunk.buildingGenerator.BuildHollowMap();
-
-        chunk.buildingGenerator.DebugDraw();
-
         foreach (var _ in wfc.Generate(chunk))
         {
             yield return null;

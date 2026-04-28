@@ -16,6 +16,11 @@ public class BuildingSlot : Slot
         this.levelReference = levelReference;
     }
 
+    public GameObject GetInstantiatedPrefab()
+    {
+        return instantiatedPrefab;
+    }
+
     /// <summary>
     /// Draw the object at this position
     /// </summary>
