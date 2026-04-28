@@ -15,5 +15,5 @@ MonoBehaviour:
   height: 1
   prefab: {fileID: 8758819196851795758, guid: 9aab8e6004dd7924b945b9a6ca18381f, type: 3}
   modelType: 2
-  chanceType: 0
-  chanceValue: 0.2
+  chanceType: 1
+  chanceValue: 0.4
