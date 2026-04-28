@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8762800419750449194}
   - component: {fileID: 1834910719917282974}
   m_Layer: 0
-  m_Name: mvp_cube
+  m_Name: solid1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 66a4704923c79d741a29530e725cf576, type: 2}
+  - {fileID: 2100000, guid: a04398e6f4f601844b72cf01b7c0ef14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -43,9 +43,10 @@ public class BuildingModule : ScriptableObject
     {
         switch (below)
         {
-            // below empty, this can be empty TODO add floating very low chance
+            // Empty and floating stacks on empty
             case ModelType.EMPTY:
-                return this.modelType == ModelType.EMPTY;
+                return this.modelType == ModelType.EMPTY ||
+                       this.modelType == ModelType.FLOATING;
             // Anything can stack on solid
             case ModelType.SOLID:
                 return this.modelType == ModelType.SOLID || 
@@ -57,7 +58,7 @@ public class BuildingModule : ScriptableObject
                 return this.modelType == ModelType.EMPTY ||
                        this.modelType == ModelType.FLOATING ||
                        this.modelType == ModelType.SOLID;
-            // Empty can stack on tip
+            // Empty or floating can stack on tip
             case ModelType.TIP:
                 return this.modelType == ModelType.EMPTY;
             default:

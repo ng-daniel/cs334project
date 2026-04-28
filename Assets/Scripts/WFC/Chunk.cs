@@ -10,17 +10,12 @@ namespace WFC
         public int chunkX;
         public int chunkY;
         public Level<Slot> level; // paths
-        //public BuildingGenerator buildingGenerator;
-
-        public BuildingGenerator buildingGenerator;
 
         public Chunk(int chunkX, int chunkY, int height)
         {
             this.chunkX = chunkX;
             this.chunkY = chunkY;
             level = new Level<Slot>(this, 1, height);
-
-            this.buildingGenerator = new BuildingGenerator(this);
 
             for (int i = 0; i < level.slots.Length; i++)
             {

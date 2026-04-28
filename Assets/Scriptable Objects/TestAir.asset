@@ -16,4 +16,4 @@ MonoBehaviour:
   prefab: {fileID: 0}
   modelType: 0
   chanceType: 1
-  chanceValue: 0.4
+  chanceValue: 0.8

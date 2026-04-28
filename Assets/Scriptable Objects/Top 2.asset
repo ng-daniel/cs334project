@@ -16,4 +16,4 @@ MonoBehaviour:
   prefab: {fileID: 6694063009232052997, guid: e22109b9bf536db4cb40d98204516cb0, type: 3}
   modelType: 3
   chanceType: 1
-  chanceValue: 0.4
+  chanceValue: 1

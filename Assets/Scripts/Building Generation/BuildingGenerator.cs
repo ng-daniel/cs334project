@@ -185,6 +185,7 @@ public class BuildingGenerator
         Assert.Greater(compatibleModules.Count, 0);
 
         // Use weighted probabilities to assign random module
+        // TODO: I know we're not supposed to do absolute val of y position - fix later
         float total = 0.0f;
         int numBuildingLayers = GenerationManager.instance.numBuildingLayers;
         foreach (BuildingModule module in compatibleModules)
@@ -196,11 +197,11 @@ public class BuildingGenerator
                     break;
                 case BuildingModule.ChanceType.POSITIVE_CORRELATION:
                     AnimationCurve positiveCorrelationCurve = GenerationManager.instance.positiveCorrelationCurve;
-                    total += module.chanceValue * positiveCorrelationCurve.Evaluate(yPosition / (numBuildingLayers));
+                    total += module.chanceValue * positiveCorrelationCurve.Evaluate(System.Math.Abs(yPosition) / (numBuildingLayers));
                     break;
                 case BuildingModule.ChanceType.NEGATIVE_CORRELATION:
                     AnimationCurve negativeCorrelationCurve = GenerationManager.instance.negativeCorrelationCurve;
-                    total += module.chanceValue * negativeCorrelationCurve.Evaluate(yPosition / (numBuildingLayers));
+                    total += module.chanceValue * negativeCorrelationCurve.Evaluate(System.Math.Abs(yPosition) / (numBuildingLayers));
                     break;
                 default:
                     Debug.LogError("Invalid Chance Type.");
