@@ -4,28 +4,25 @@ using UnityEngine;
 
 public static class AsyncRunner
 {
-    private static bool running;
+    private static int runningCount;
 
     private static IEnumerator AsyncRoutine(IEnumerable coroutine)
     {
-        while (running)
-        {
-            yield return null;
-        }
-
-        running = true;
+        runningCount++;
 
         Stack<IEnumerator> stack = new Stack<IEnumerator>();
         stack.Push(coroutine.GetEnumerator());
 
         // Frame rate is 60fps, use 40% of a frame at most
         float timePerFrame = 0.4f / 60f;
-        float yieldTime = Time.realtimeSinceStartup + timePerFrame;
+        float yieldTime;
 
         void ResetTimer()
         {
-            yieldTime = Time.realtimeSinceStartup + timePerFrame;
+            yieldTime = Time.realtimeSinceStartup + timePerFrame / runningCount;
         }
+
+        ResetTimer();
 
         while (stack.Count > 0)
         {
@@ -55,7 +52,7 @@ public static class AsyncRunner
             }
         }
 
-        running = false;
+        runningCount--;
     }
 
     public static void RunAsync(IEnumerable coroutine)
