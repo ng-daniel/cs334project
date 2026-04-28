@@ -14,11 +14,11 @@ namespace WFC
 
         public BuildingGenerator buildingGenerator;
 
-        public Chunk(int chunkX, int chunkY)
+        public Chunk(int chunkX, int chunkY, int height)
         {
             this.chunkX = chunkX;
             this.chunkY = chunkY;
-            level = new Level<Slot>(this, 1, 0.0f);
+            level = new Level<Slot>(this, 1, height);
 
             this.buildingGenerator = new BuildingGenerator(this);
 
