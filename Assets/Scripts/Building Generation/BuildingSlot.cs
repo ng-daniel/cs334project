@@ -9,7 +9,6 @@ public class BuildingSlot : Slot
     public BuildingModule buildingModule;
     public GameObject instantiatedPrefab = null;
     public bool isVisible = false; // after building map is generated, whether prefab should be created
-    public bool isExteriorAir = false;
 
     public BuildingSlot(Chunk chunk, int slotX, int slotY, Level<BuildingSlot> levelReference) : base(chunk, slotX, slotY)
     {
@@ -28,7 +27,7 @@ public class BuildingSlot : Slot
             return;
         }
 
-        if (IsEmpty())
+        if (!isVisible || IsEmpty())
         {
             return;
         }
@@ -42,9 +41,8 @@ public class BuildingSlot : Slot
 
     public bool IsEmpty()
     {
-        return !isVisible ||
-                !buildingModule ||
-                !buildingModule.prefab ||
-                buildingModule.modelType == ModelType.EMPTY;
+        return !buildingModule ||
+               !buildingModule.prefab ||
+               buildingModule.modelType == ModelType.EMPTY;
     }
 }

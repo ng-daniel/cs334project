@@ -5,7 +5,7 @@ namespace WFC
 {
     public class Chunk
     {
-        public const int CHUNK_SIZE = 30;
+        public const int CHUNK_SIZE = 10;
 
         public int chunkX;
         public int chunkY;

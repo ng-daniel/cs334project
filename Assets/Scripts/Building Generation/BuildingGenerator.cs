@@ -7,7 +7,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 using WFC;
-using static UnityEngine.Rendering.PostProcessing.HistogramMonitor;
 
 public class BuildingGenerator
 {
@@ -237,93 +236,54 @@ public class BuildingGenerator
     {
         // For each level in building map
 
-        foreach (Level<BuildingSlot> level in buildingMap)
+        for (int i = 0; i < buildingMap.Count; i++)
         {
-            bool[,] visitedSlot = new bool[Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE];
-            Queue<Vector2Int> queue = new Queue<Vector2Int>();
-
-            // Go through each outer edge that is air, and add to queue
-
-            for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
+            Level<BuildingSlot> level = buildingMap[i];
+            foreach (BuildingSlot slot in level.slots)
             {
-                BuildingSlot slot1 = level.GetSlot(x, 0);
-                BuildingSlot slot2 = level.GetSlot(x, Chunk.CHUNK_SIZE - 1);
+                int x = slot.slotX;
+                int y = slot.slotY;
 
-                if (slot1.IsEmpty())
+                // Check for empty on same layer
+                BuildingSlot left = level.GetSlot(x - 1, y);
+                BuildingSlot right = level.GetSlot(x + 1, y);
+                BuildingSlot front = level.GetSlot(x, y + 1);
+                BuildingSlot back = level.GetSlot(x, y - 1);
+
+                if (left != null && left.IsEmpty() ||
+                    right != null && right.IsEmpty() ||
+                    front != null && front.IsEmpty() ||
+                    back != null && back.IsEmpty())
                 {
-                    queue.Enqueue(new Vector2Int(x, 0));
-                    visitedSlot[x, 0] = true;
-                }
-
-                if (slot2.IsEmpty())
+                    slot.isVisible = true;
+                } else
                 {
-                    queue.Enqueue(new Vector2Int(x, slot2.slotY));
-                    visitedSlot[x, slot2.slotY] = true;
-                }
-            }
+                    // Try top and bottom as well
 
-            for (int y = 1; y < Chunk.CHUNK_SIZE - 1; y++)
-            {
-                BuildingSlot slot1 = level.GetSlot(0, y);
-                BuildingSlot slot2 = level.GetSlot(Chunk.CHUNK_SIZE - 1, y);
-
-                if (slot1.IsEmpty())
-                {
-                    queue.Enqueue(new Vector2Int(0, y));
-                    visitedSlot[0, y] = true;
-                    slot1.isExteriorAir = true;
-                }
-
-                if (slot2.IsEmpty())
-                {
-                    queue.Enqueue(new Vector2Int(slot2.slotX, y));
-                    visitedSlot[slot2.slotX, y] = true;
-                    slot2.isExteriorAir = true;
-                }
-            }
-
-            // Go through the queue and mark exterior air
-
-            while (queue.Count > 0)
-            {
-                Vector2Int slotPos = queue.Dequeue();
-
-                // Check all four directions 
-
-                BuildingSlot[] toCheck = new BuildingSlot[] {
-                    level.GetSlot(slotPos.x + 1, slotPos.y),
-                    level.GetSlot(slotPos.x - 1, slotPos.y),
-                    level.GetSlot(slotPos.x, slotPos.y - 1),
-                    level.GetSlot(slotPos.x, slotPos.y + 1)
-                };
-
-                for (int i = 0; i < toCheck.Length; i++)
-                {
-                    BuildingSlot slot = toCheck[i];
-                    if (slot == null ||
-                        visitedSlot[slot.slotX, slot.slotY])
+                    // above
+                    if (i < buildingMap.Count - 1)
                     {
-                        continue;
+                        BuildingSlot top = buildingMap[i + 1].GetSlot(x, y);
+                        if (top.IsEmpty())
+                        {
+                            slot.isVisible = true;
+                        }
                     }
 
-                    if (slot.IsEmpty())
+                    // below
+                    if (!slot.isVisible && i > 0)
                     {
-                        visitedSlot[slot.slotY, slot.slotY] = true;
-                        queue.Enqueue(new Vector2Int(slot.slotX, slot.slotY));
-                        slot.isExteriorAir = true;
+                        BuildingSlot bottom = buildingMap[i - 1].GetSlot(x, y);
+                        if (bottom.IsEmpty())
+                        {
+                            slot.isVisible = true;
+                        }
                     }
                 }
+
             }
+        }
 
-
-        } // end for
-
-        // If a block is not empty and touches exterior air, then mark as visible
-        //for (int i = 0; i < buildingMap.slots.Length; i++)
-        //{
-
-        //}
-        // TODO
 
     }
 
