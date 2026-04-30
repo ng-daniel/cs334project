@@ -16,12 +16,12 @@ namespace Assets.Scripts.ChunkLoading
         public ChunkNode(Vector2Int coords)
         {
             this.coords = coords;
-                
+
             for (int i = 0; i < ChunkLoadingManager.instance.LayerHeights.Count; i++)
             {
                 int height = ChunkLoadingManager.instance.LayerHeights[i];
                 chunkLayers.Add(new Chunk(coords.x, coords.y, height));
-                
+
                 if (i == 0)
                 {
                     basePathChunk = chunkLayers[0];
@@ -35,7 +35,7 @@ namespace Assets.Scripts.ChunkLoading
         {
             foreach (Chunk chunk in chunkLayers)
             {
-                yield return GenerationManager.instance.GenerateChunk(chunk);   
+                yield return GenerationManager.instance.GenerateChunk(chunk);
             }
             yield return buildingGenerator.GenerateLevels();
             yield return buildingGenerator.DebugDraw();
@@ -46,6 +46,15 @@ namespace Assets.Scripts.ChunkLoading
             foreach (Chunk chunk in chunkLayers)
             {
                 foreach (Slot slot in chunk.level.slots)
+                {
+                    slot.Unload();
+                    yield return null;
+                }
+            }
+
+            foreach (Level<BuildingSlot> level in buildingGenerator.buildingMap)
+            {
+                foreach (BuildingSlot slot in level.slots)
                 {
                     slot.Unload();
                     yield return null;

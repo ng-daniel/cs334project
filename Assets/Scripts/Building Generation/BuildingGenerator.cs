@@ -7,7 +7,7 @@ using WFC;
 public class BuildingGenerator
 {
     private Chunk chunk;
-    private const int NUM_LAYERS = 50;
+    private const int NUM_LAYERS = 15;
 
     public List<Level<BuildingSlot>> buildingMap; // A list of levels at various heights
     public BuildingGenerator(Chunk chunk)
@@ -26,10 +26,7 @@ public class BuildingGenerator
         // TODO create a number of layers parameter
         for (float yHeight = 0; yHeight < NUM_LAYERS; yHeight++)
         {
-            foreach (var _ in AddNextLayer(1))
-            {
-                yield return null;
-            }
+            yield return AddNextLayer(1);
             // TODO change level height
         }
     }

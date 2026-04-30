@@ -358,7 +358,7 @@ MonoBehaviour:
   initialChunkRadius: 3
   chunkLoadRadius: 2
   chunkUnloadRadius: 4
-  numLayers: 3
+  numLayers: 1
   maxTotalHeight: 100
   minLayerHeight: 5
   maxLayerHeight: 20

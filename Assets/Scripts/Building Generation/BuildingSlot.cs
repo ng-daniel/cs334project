@@ -30,7 +30,7 @@ public class BuildingSlot : Slot
         }
 
         if (!buildingModule ||
-            !buildingModule.prefab || 
+            !buildingModule.prefab ||
             buildingModule.modelType == ModelType.EMPTY)
         {
             return;
@@ -44,5 +44,8 @@ public class BuildingSlot : Slot
         this.instantiatedPrefab.transform.localScale *= 2;
     }
 
-
+    public override void Unload()
+    {
+        Object.Destroy(instantiatedPrefab);
+    }
 }
