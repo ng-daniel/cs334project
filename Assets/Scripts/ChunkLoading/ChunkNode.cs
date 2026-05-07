@@ -39,6 +39,7 @@ namespace Assets.Scripts.ChunkLoading
             }
             yield return buildingGenerator.GenerateLevels();
             yield return buildingGenerator.DebugDraw();
+            buildingGenerator.buildingMap.Clear();
         }
 
         public IEnumerable Unload()
