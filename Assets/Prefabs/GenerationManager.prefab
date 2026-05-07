@@ -54,6 +54,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 55acd77c2cdc215489c9722c545c0b00, type: 2}
   - {fileID: 11400000, guid: 9174837836f806b4cbd791723916218f, type: 2}
   - {fileID: 11400000, guid: 12512477e8a71084b9c09c17a613e149, type: 2}
+  - {fileID: 11400000, guid: fa386cbf282f413499f3fae2b43af526, type: 2}
+  - {fileID: 11400000, guid: 737c629ae737a7a4a85c7078fe74ef57, type: 2}
   positiveCorrelationCurve:
     serializedVersion: 2
     m_Curve:
@@ -104,4 +106,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   minBuildingsPerChunk: 1
   maxBuildingsPerChunk: 5
-  numBuildingLayers: 50
+  numBuildingLayers: 30

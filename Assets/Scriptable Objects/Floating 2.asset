@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96af3a4fabdc61241b33547991d5a1ff, type: 3}
-  m_Name: TestAir
+  m_Name: Floating 2
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModule
   height: 1
-  prefab: {fileID: 0}
-  modelType: 0
+  prefab: {fileID: 3816303674134119218, guid: 3293715b13d388745a523b5451bab410, type: 3}
+  modelType: 2
   chanceType: 0
-  chanceValue: 1
+  chanceValue: 0.01
