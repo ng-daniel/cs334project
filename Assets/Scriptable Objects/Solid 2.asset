@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModule
   height: 1
   prefab: {fileID: 2123781326343967615, guid: a0d2ff3ebed0ccc44ab0b679f36c71fc, type: 3}
-  modelType: 1
+  modelType: 4
   chanceType: 0
-  chanceValue: 0.05
+  chanceValue: 2

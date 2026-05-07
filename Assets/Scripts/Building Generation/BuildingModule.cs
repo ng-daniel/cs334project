@@ -12,7 +12,8 @@ public class BuildingModule : ScriptableObject
         EMPTY, // Skip this grid cell, but a block/
         SOLID,
         FLOATING,
-        TIP
+        TIP,
+        SOLID2
     }
 
     /// <summary>
@@ -50,14 +51,17 @@ public class BuildingModule : ScriptableObject
             // Anything can stack on solid
             case ModelType.SOLID:
                 return this.modelType == ModelType.SOLID || 
+                       this.modelType == ModelType.SOLID2 ||
                        this.modelType == ModelType.EMPTY ||
                        this.modelType == ModelType.TIP ||
                        this.modelType == ModelType.FLOATING;
+            case ModelType.SOLID2:
+                return this.modelType == ModelType.SOLID2 ||
+                       this.modelType == ModelType.EMPTY;
             // Air/floating can stack on floating
             case ModelType.FLOATING:
                 return this.modelType == ModelType.EMPTY ||
-                       this.modelType == ModelType.FLOATING ||
-                       this.modelType == ModelType.SOLID;
+                       this.modelType == ModelType.FLOATING;
             // Empty or floating can stack on tip
             case ModelType.TIP:
                 return this.modelType == ModelType.EMPTY;

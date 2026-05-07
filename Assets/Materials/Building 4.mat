@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Building 2
+  m_Name: Building 4
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 2100000, guid: a04398e6f4f601844b72cf01b7c0ef14, type: 2}
   m_ModifiedSerializedProperties: 2
@@ -25,13 +25,22 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 4341c5e9289b20543b331e70b843af41, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 4341c5e9289b20543b331e70b843af41, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _Metallic: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.1692377, b: 0, a: 1}
-    - _Color: {r: 1, g: 0.16923767, b: 0, a: 1}
-    - _EmissionColor: {r: 48.301895, g: 0, b: 7.4151745, a: 1}
+    - _BaseColor: {r: 1, g: 0.4764151, b: 0.8691038, a: 1}
+    - _Color: {r: 1, g: 0.47641504, b: 0.8691038, a: 1}
+    - _EmissionColor: {r: 0, g: 3.9182703, b: 47.094337, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &845001793751320633

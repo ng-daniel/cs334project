@@ -56,6 +56,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 12512477e8a71084b9c09c17a613e149, type: 2}
   - {fileID: 11400000, guid: fa386cbf282f413499f3fae2b43af526, type: 2}
   - {fileID: 11400000, guid: 737c629ae737a7a4a85c7078fe74ef57, type: 2}
+  - {fileID: 11400000, guid: 8b6ddf5f71ee8b84495b540c80ab80ec, type: 2}
+  - {fileID: 11400000, guid: 00e60fb424cfdb344af039afa0a18f66, type: 2}
+  - {fileID: 11400000, guid: 13d9ac998aa0475449a9ee09d7332389, type: 2}
   positiveCorrelationCurve:
     serializedVersion: 2
     m_Curve:
