@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 8762800419750449194}
   - component: {fileID: 1834910719917282974}
   - component: {fileID: -684814480435211705}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: mvp_cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7345799819724094766
 Transform:
