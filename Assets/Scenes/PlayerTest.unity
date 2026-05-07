@@ -405,9 +405,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ChunkLoading.ChunkLoadingManager
   initialChunkRadius: 3
-  chunkLoadRadius: 3
-  chunkUnloadRadius: 5
-  numLayers: 3
+  chunkLoadRadius: 2
+  chunkUnloadRadius: 4
+  numLayers: 1
   maxTotalHeight: 100
   minLayerHeight: 5
   maxLayerHeight: 20

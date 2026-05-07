@@ -50,4 +50,8 @@ public class BuildingSlot : Slot
                !buildingModule.prefab ||
                buildingModule.modelType == ModelType.EMPTY;
     }
+    public override void Unload()
+    {
+        Object.Destroy(instantiatedPrefab);
+    }
 }

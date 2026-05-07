@@ -122,12 +122,12 @@ namespace WFC
                 }
             }
         }
-        
+
         /// <summary>
         /// Destroys all GameObjects spawned by this slot. 
         /// Should be called when a chunk is unloaded so it actually disappears.
         /// </summary>
-        public void Unload()
+        public virtual void Unload()
         {
             for (int i = 0; i < cubes.Count; i++)
             {
