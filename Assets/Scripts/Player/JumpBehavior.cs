@@ -21,6 +21,7 @@ namespace Assets.Scripts.Player
                 rb.AddForce(0, jumpStats.JumpImpulse, 0, ForceMode.Impulse);
                 return true;
             }
+
             return false;
         }
 
@@ -37,11 +38,15 @@ namespace Assets.Scripts.Player
 
         public bool IsGrounded()
         {
-            Vector3 origin = transform.position + Vector3.down * jumpStats.distanceToGroundCheck;
-            return Physics.CheckSphere(origin, jumpStats.groundCheckRadius, jumpStats.groundLayer);
+            // Vector3 origin = transform.position + Vector3.down * jumpStats.distanceToGroundCheck;
+            // return Physics.CheckSphere(origin, jumpStats.groundCheckRadius, jumpStats.groundLayer);
+
+            // Allow infinite jumping for convenience
+            return true;
         }
 
-        private void OnDrawGizmosSelected() {
+        private void OnDrawGizmosSelected()
+        {
             if (jumpStats != null)
             {
                 Vector3 origin = transform.position + Vector3.down * jumpStats.distanceToGroundCheck;

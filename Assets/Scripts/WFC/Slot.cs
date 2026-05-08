@@ -8,7 +8,8 @@ namespace WFC
         public const float SLOT_SIZE = 2;
         public const float SLOT_HEIGHT = 0.2f;
         public const float SLOT_CENTER = 0.6f;
-        public const float SLOT_EDGE = 0.6f;
+        public const float SLOT_EDGE = (SLOT_SIZE - SLOT_CENTER) / 2f;
+        //public const float SLOT_EDGE = 0.6f;
 
         public readonly Chunk chunk;
         public readonly int slotX;

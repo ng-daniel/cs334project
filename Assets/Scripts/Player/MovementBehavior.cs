@@ -1,6 +1,5 @@
-using Unity.VisualScripting;
+using Assets.Scripts.ChunkLoading;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Player
 {
@@ -20,6 +19,13 @@ namespace Assets.Scripts.Player
         public void MoveRegular(Vector2 rawInput)
         {
             Move(rawInput, moveStats);
+
+            // Prevent falling out of the map
+            if (transform.position.y < ChunkLoadingManager.instance.LayerHeights[0] - 5f)
+            {
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                rb.AddForce(0, 15, 0, ForceMode.Impulse);
+            }
         }
         public void MoveDebug(Vector2 rawInput)
         {
@@ -32,7 +38,7 @@ namespace Assets.Scripts.Player
         /// <param name="rawInput">The input vector representing the desired movement direction.</param>
         /// <param name="moveStats">The movement stats to use for this movement.</param>
         void Move(Vector2 rawInput, MovementStats moveStats)
-        {   
+        {
             const float inputThreshold = 0.01f;
             float dt = Time.fixedDeltaTime;
 
