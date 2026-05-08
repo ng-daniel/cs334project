@@ -107,6 +107,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minBuildingsPerChunk: 1
-  maxBuildingsPerChunk: 5
+  minBuildingsPerChunk: 2
+  maxBuildingsPerChunk: 7
   numBuildingLayers: 30
