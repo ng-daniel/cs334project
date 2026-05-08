@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96af3a4fabdc61241b33547991d5a1ff, type: 3}
   m_Name: TestAir
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModule
+  height: 1
   prefab: {fileID: 0}
   modelType: 0
-  chanceType: 0
+  chanceType: 1
+  chanceValue: 1

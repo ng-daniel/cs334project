@@ -12,7 +12,8 @@ public class BuildingModule : ScriptableObject
         EMPTY, // Skip this grid cell, but a block/
         SOLID,
         FLOATING,
-        TIP
+        TIP,
+        SOLID2
     }
 
     /// <summary>
@@ -21,13 +22,20 @@ public class BuildingModule : ScriptableObject
     public enum ChanceType
     {
         CONSTANT,
-        POSITIVE_CORRELATION, // Height increases, chance increases
-        NEGATIVE_CORRELATION // Height decreases, chance decrease
+        POSITIVE_CORRELATION,
+        NEGATIVE_CORRELATION
     }
 
     public GameObject prefab;
     public ModelType modelType = ModelType.SOLID;
+
+    /// <summary>
+    /// Chance type constant: chanceValue is constant
+    /// Chance type Gaussian: chanceValue is the mean height position, std dev 1
+    /// </summary>
     public ChanceType chanceType = ChanceType.CONSTANT;
+
+    public float chanceValue = 0.5f;
 
     /// <summary>
     /// Whether this module can stop on the input module below
@@ -36,21 +44,25 @@ public class BuildingModule : ScriptableObject
     {
         switch (below)
         {
-            // below empty, this can be empty TODO add floating very low chance
+            // Empty and floating stacks on empty
             case ModelType.EMPTY:
-                return this.modelType == ModelType.EMPTY;
+                return this.modelType == ModelType.EMPTY ||
+                       this.modelType == ModelType.FLOATING;
             // Anything can stack on solid
             case ModelType.SOLID:
                 return this.modelType == ModelType.SOLID || 
+                       this.modelType == ModelType.SOLID2 ||
                        this.modelType == ModelType.EMPTY ||
                        this.modelType == ModelType.TIP ||
                        this.modelType == ModelType.FLOATING;
+            case ModelType.SOLID2:
+                return this.modelType == ModelType.SOLID2 ||
+                       this.modelType == ModelType.EMPTY;
             // Air/floating can stack on floating
             case ModelType.FLOATING:
                 return this.modelType == ModelType.EMPTY ||
-                       this.modelType == ModelType.FLOATING ||
-                       this.modelType == ModelType.SOLID;
-            // Empty can stack on tip
+                       this.modelType == ModelType.FLOATING;
+            // Empty or floating can stack on tip
             case ModelType.TIP:
                 return this.modelType == ModelType.EMPTY;
             default:

@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96af3a4fabdc61241b33547991d5a1ff, type: 3}
-  m_Name: TestSolid
+  m_Name: Top 2
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModule
-  prefab: {fileID: 2123781326343967615, guid: 053e4af39abc0d3409b1c6e177b4364a, type: 3}
-  modelType: 1
-  chanceType: 0
+  height: 1
+  prefab: {fileID: 6694063009232052997, guid: e22109b9bf536db4cb40d98204516cb0, type: 3}
+  modelType: 3
+  chanceType: 1
+  chanceValue: 1

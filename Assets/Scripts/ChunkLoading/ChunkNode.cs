@@ -57,6 +57,8 @@ namespace Assets.Scripts.ChunkLoading
                 foreach (BuildingSlot slot in level.slots)
                 {
                     slot.Unload();
+                    GameObject.Destroy(slot.instantiatedPrefab);
+                    slot.instantiatedPrefab = null;
                     yield return null;
                 }
             }

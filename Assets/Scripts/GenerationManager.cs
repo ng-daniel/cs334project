@@ -1,8 +1,11 @@
-using System.Collections;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
+using System.Collections;
 using Assets.Scripts.ChunkLoading;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 using WFC;
 
 public class GenerationManager : MonoBehaviour
@@ -12,11 +15,19 @@ public class GenerationManager : MonoBehaviour
     public WFCGenerator wfc;
     public GameObject cube;
 
+    [Header("Building Generation Settings")]
     [SerializeField]
     public List<BuildingModule> buildingModulesList;
-
     [SerializeField]
-    public int numRectsInFirstLevel = 2; // Num of rectangles filled in first layer per chunk
+    public AnimationCurve positiveCorrelationCurve;
+    [SerializeField]
+    public AnimationCurve negativeCorrelationCurve;
+    [SerializeField]
+    public int minBuildingsPerChunk = 1;
+    [SerializeField]
+    public int maxBuildingsPerChunk = 5;
+    [SerializeField]
+    public int numBuildingLayers = 30; 
 
     void Awake()
     {
@@ -34,32 +45,17 @@ public class GenerationManager : MonoBehaviour
         wfc.BuildAdjacencies();
     }
 
-    public IEnumerable GenerateChunk(Chunk chunk)
+    public System.Collections.IEnumerable GenerateChunk(Chunk chunk)
     {
-        yield return wfc.Generate(chunk);
-        yield return chunk.PostGeneration();
-    }
-
-    public BuildingModule GetRandomBuildingModule(BuildingModule bottomModule)
-    {
-        if (bottomModule == null) return null;
-
-        // Get a list of all compatible modules
-        List<BuildingModule> compatibleModules = new List<BuildingModule>();
-
-        foreach (BuildingModule module in buildingModulesList)
+        foreach (var _ in wfc.Generate(chunk))
         {
-            if (module.CanStackOnType(bottomModule.modelType))
-            {
-                compatibleModules.Add(module);
-            }
+            yield return null;
         }
-
-        Assert.Greater(compatibleModules.Count, 0);
-
-        // Choose random from list TODO: use weighted probs, get probs from height
-        // Assign random module
-        int randInd = Random.Range(0, compatibleModules.Count);
-        return compatibleModules[randInd];
+        foreach (var _ in chunk.PostGeneration())
+        {
+            yield return null;
+        }
     }
+
+    
 }

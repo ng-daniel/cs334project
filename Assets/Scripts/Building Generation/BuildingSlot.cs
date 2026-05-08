@@ -4,13 +4,16 @@ using static BuildingModule;
 
 public class BuildingSlot : Slot
 {
+    public readonly Level<BuildingSlot> levelReference;
 
     public BuildingModule buildingModule;
     public GameObject instantiatedPrefab = null;
+    public bool isVisible = false; // after building map is generated, whether prefab should be created
 
-    public BuildingSlot(Chunk chunk, int slotX, int slotY) : base(chunk, slotX, slotY)
+    public BuildingSlot(Chunk chunk, int slotX, int slotY, Level<BuildingSlot> levelReference) : base(chunk, slotX, slotY)
     {
         buildingModule = null;
+        this.levelReference = levelReference;
     }
 
     public GameObject GetInstantiatedPrefab()
@@ -29,21 +32,24 @@ public class BuildingSlot : Slot
             return;
         }
 
-        if (!buildingModule ||
-            !buildingModule.prefab ||
-            buildingModule.modelType == ModelType.EMPTY)
+        if (!isVisible || IsEmpty())
         {
             return;
         }
 
         Vector3 pos = WorldPos();
-        //pos.x *= 2;
-        //pos.z *= 2;
+        pos.y = levelReference.levelYPosition;
 
         this.instantiatedPrefab = GameObject.Instantiate(buildingModule.prefab, pos, buildingModule.prefab.transform.rotation);
         this.instantiatedPrefab.transform.localScale *= 2;
     }
 
+    public bool IsEmpty()
+    {
+        return !buildingModule ||
+               !buildingModule.prefab ||
+               buildingModule.modelType == ModelType.EMPTY;
+    }
     public override void Unload()
     {
         Object.Destroy(instantiatedPrefab);

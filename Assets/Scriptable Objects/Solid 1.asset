@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96af3a4fabdc61241b33547991d5a1ff, type: 3}
+  m_Name: Solid 1
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingModule
+  height: 1
+  prefab: {fileID: 2123781326343967615, guid: 8baeb32628319be4aac48a5c5058d725, type: 3}
+  modelType: 1
+  chanceType: 0
+  chanceValue: 30

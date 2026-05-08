@@ -5,7 +5,7 @@ namespace WFC
 {
     public class Chunk
     {
-        public const int CHUNK_SIZE = 30;
+        public const int CHUNK_SIZE = 10;
 
         public int chunkX;
         public int chunkY;
@@ -15,7 +15,7 @@ namespace WFC
         {
             this.chunkX = chunkX;
             this.chunkY = chunkY;
-            level = new Level<Slot>(this, height);
+            level = new Level<Slot>(this, 1, height);
 
             for (int i = 0; i < level.slots.Length; i++)
             {
